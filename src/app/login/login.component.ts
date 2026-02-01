@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { ZodFormValidators } from '../services/zod-form-validators.service';
-import { LoginSchema } from '../shemas/login.shema';
-import { TrimOnBlurDirective } from '../services/trim-on-blur-directive';
+import { ZodFormValidators } from '../shared/services/zod-form-validators.service';
+import { LoginSchema } from '../shared/shemas/login.shema';
+import { TrimOnBlurDirective } from '../shared/services/trim-on-blur-directive';
 import { AuthService } from '../core/auth.service';
 import { Router } from '@angular/router';
-import { NotificationService } from '../services/notification.service';
+import { NotificationService } from '../shared/services/notification.service';
 
 @Component({
   selector: 'app-login.component',
