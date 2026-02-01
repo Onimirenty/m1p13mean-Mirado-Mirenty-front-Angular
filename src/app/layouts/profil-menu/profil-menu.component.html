@@ -1,0 +1,29 @@
+
+<div class="relative">
+  <button (click)="toggleProfile()" class="flex items-center group p-1 rounded-full transition-all duration-300 hover:bg-gray-100">
+    <div class="relative shrink-0">
+      <img class="h-9 w-9 rounded-full object-cover border-2 border-transparent group-hover:border-yellow transition-all"
+          [src]="urlImageProfil"
+          alt="Profil">
+      <span class="absolute bottom-0 right-0 block h-2.5 w-2.5 rounded-full ring-2 ring-white bg-green-500"></span>
+    </div>
+    <!-- Chevron -->
+    <i class="fas fa-chevron-down text-[10px] ml-2 text-gray-400 hidden md:block transition-transform"
+      [class.rotate-180]="isProfileOpen()"></i>
+  </button>
+
+  <!-- Dropdown Menu -->
+  @if (isProfileOpen()) {
+    <div class="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-lg border border-gray-100 py-1 z-[60] animate-in fade-in zoom-in duration-200 origin-top-right">
+      <a [href]="pathProfil" (click)="isProfileOpen.set(false);" class="w-full flex items-center px-4 py-3 text-sm text-dark-blue hover:bg-gray-50 transition-colors">
+        <i class="far fa-user mr-3 text-blue-500"></i> Profil
+      </a>
+      <div class="border-t border-gray-100 my-1"></div>
+      <button (click)="logout()"  class="w-full flex items-center px-4 py-3 text-sm text-red hover:bg-red-50 transition-colors">
+        <i class="fas fa-sign-out-alt mr-3"></i> Déconnexion
+      </button>
+    </div>
+    <!-- Overlay invisible pour fermer au clic extérieur -->
+    <div (click)="isProfileOpen.set(false)" class="fixed inset-0 z-[55]"></div>
+  }
+</div>

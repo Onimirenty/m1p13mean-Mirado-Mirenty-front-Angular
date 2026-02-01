@@ -1,0 +1,51 @@
+<div class="min-h-screen flex flex-col ">
+  <app-aside [isOpen]="isMenuOpen()" [menuItems]="adminMenu"></app-aside>
+  <!-- Overlay -->
+  @if (isMenuOpen()) {
+    <div
+      (click)="toggleMenu()"
+      class="fixed inset-0 bg-black/40 backdrop-blur-xs z-[55] transition-opacity duration-300">
+    </div>
+  }
+  <!-- Header -->
+  <header class="fixed top-0 left-0 right-0 z-50 flex items-center justify-between h-16 bg-white shadow-sm px-4 ">
+    <!-- Menu hamburger -->
+    <div class="text-dark-blue font-bold text-lg">
+      <button (click)="toggleMenu()" type="button" title="Menu" class="text-dark-blue text-xl hover:text-gray-800 p-2">
+        <i class="fas fa-bars"></i>
+      </button>
+      Boutique
+    </div>
+    <!-- Icônes de droite et profil -->
+    <div class="flex items-center space-x-4 text-xl text-dark-blue">
+
+      <!-- Icône Cœur -->
+      <button type="button" title="mes favoris" class=" hover:text-gray-800 p-2">
+        <!-- Icône Cœur Font Awesome -->
+        <i class="far fa-heart"></i>
+      </button>
+
+      <!-- Icône de notification avec badge -->
+      <button type="button" title="Notifications" class=" hover:text-gray-800 p-2 relative">
+        <!-- Icône Notification Font Awesome -->
+        <i class="far fa-bell"></i>
+        <!-- Badge rouge (point)  -->
+        <span class="absolute top-1 right-1 block h-4 w-4 rounded-full ring-2 ring-white bg-red-500 text-[10px] text-white">1</span>
+      </button>
+      <!-- Photo de profil/Avatar + Dropdown -->
+      <app-profil-menu urlImageProfil="assets/bg-image-market.png" pathProfil="boutique/profil" ></app-profil-menu>
+    </div>
+  </header>
+
+  <main class="min-h-screen flex-1 p-6 mt-16">
+    <router-outlet></router-outlet>
+  </main>
+
+  <!-- Le footer original reste inchangé -->
+  <app-footer
+    titre="Espace Partenaire"
+    texte="Optimisez votre vitrine et boostez votre chiffre d'affaires."
+  >
+  </app-footer>
+</div>
+

@@ -1,0 +1,43 @@
+<div class="min-h-screen flex flex-col " >
+  <app-aside [isOpen]="isMenuOpen()" [menuItems]="adminMenu"></app-aside>
+  <!-- Overlay -->
+  @if (isMenuOpen()) {
+    <div
+      (click)="toggleMenu()"
+      class="fixed inset-0 bg-black/40 backdrop-blur-xs z-[55] transition-opacity duration-300">
+    </div>
+  }
+
+   <!-- Header -->
+  <header class="fixed top-0 left-0 right-0 z-50 flex items-center justify-between h-16 bg-dark-blue shadow-md px-6">
+    <!-- Menu hamburger -->
+    <div class="text-white font-bold text-lg">
+      <button (click)="toggleMenu()" type="button" title="Menu" class="text-white hover:text-yellow p-2">
+          <i class="fas fa-bars"></i>
+      </button>
+      Admin Control
+    </div>
+    <!-- Icônes de droite et profil -->
+    <div class="flex items-center space-x-4 text-xl overflow">
+      <button type="button" title="notifiction" class="text-white hover:text-white p-2 rounded-full hover:bg-yellow ">
+        <i class="far fa-bell"></i>
+      </button>
+      <button type="button" title="message" class="text-white hover:text-white p-2 rounded-full hover:bg-yellow ">
+        <i class="far fa-envelope"></i>
+      </button>
+      <!-- Photo de profil/Avatar -->
+      <app-profil-menu urlImageProfil="assets/bg-image-market.png" pathProfil="admin/profil" ></app-profil-menu>
+    </div>
+  </header>
+
+  <main class="min-h-screen flex-1 p-6 mt-16" >
+    <router-outlet></router-outlet>
+  </main>
+
+  <app-footer
+    titre="Admin Control"
+    texte="Pilotage stratégique et supervision de l'infrastructure commerciale."
+  >
+  </app-footer>
+</div>
+
