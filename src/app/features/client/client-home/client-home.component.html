@@ -1,0 +1,76 @@
+<section class="py-10">
+  <!-- En-tête de section -->
+  <div class="flex items-end justify-between mb-8">
+    <div>
+      <h2 class="text-3xl font-black text-dark-blue tracking-tight">Offres <span class="text-yellow">Exclusives</span> <span class="text-red-800"> [EXEMPLE FOTSINY IO AFFICHAGE PRODUIT IO FA TSY VOATERY OTRAN'IO ILAY AFFICHAGE HO ATAO]</span></h2>
+      <p class="text-gray-500 text-sm mt-1 font-medium">Nos meilleures réductions du moment, sélectionnées pour vous.</p>
+    </div>
+    <button class="hidden md:flex items-center gap-2 text-dark-blue font-bold text-sm hover:underline">
+      Voir tout <i class="fas fa-arrow-right text-xs"></i>
+    </button>
+  </div>
+
+  <!-- Grille de Produits -->
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+    @for (product of promotions(); track product.id) {
+      <div class="group relative bg-white rounded-[2rem] border border-gray-100 shadow-sm hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 overflow-hidden">
+
+        <!-- Badge de réduction -->
+        <div class="absolute top-4 left-4 z-10 flex flex-col gap-2">
+          <span class="bg-red-500 text-white text-[10px] font-black px-3 py-1 rounded-full shadow-lg uppercase tracking-wider">
+            {{ product.discount }}
+          </span>
+          @if (product.tag) {
+            <span class="bg-dark-blue text-white text-[10px] font-black px-3 py-1 rounded-full shadow-lg uppercase tracking-wider">
+              {{ product.tag }}
+            </span>
+          }
+        </div>
+
+        <!-- Image avec zoom au hover -->
+        <div class="relative h-64 overflow-hidden bg-gray-50">
+          <img [src]="product.image" [alt]="product.name"
+               class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+
+          <!-- Countdown (Optionnel) -->
+          @if (product.timeLeft) {
+            <div class="absolute bottom-4 left-1/2 -translate-x-1/2 bg-white/90 backdrop-blur-md px-4 py-1.5 rounded-full border border-white/20 shadow-xl">
+              <p class="text-[10px] font-bold text-dark-blue flex items-center gap-2 whitespace-nowrap">
+                <i class="far fa-clock text-red-500 animate-pulse"></i> Expire dans : {{ product.timeLeft }}
+              </p>
+            </div>
+          }
+        </div>
+
+        <!-- Détails du produit -->
+        <div class="p-6">
+          <div class="flex justify-between items-start mb-2">
+            <div>
+              <p class="text-[10px] font-black text-yellow uppercase tracking-widest">{{ product.category }}</p>
+              <h3 class="text-lg font-bold text-dark-blue mt-1 group-hover:text-blue-600 transition-colors">{{ product.name }}</h3>
+            </div>
+            <button class="w-10 h-10 flex items-center justify-center rounded-xl bg-gray-50 text-gray-400 hover:bg-red-50 hover:text-red-500 transition-all shadow-inner">
+              <i class="far fa-heart"></i>
+            </button>
+          </div>
+
+          <!-- Prix -->
+          <div class="flex items-center gap-3 mt-4">
+            <span class="text-2xl font-black text-dark-blue">{{ product.newPrice }}€</span>
+            <span class="text-sm text-gray-400 line-through font-medium">{{ product.oldPrice }}€</span>
+          </div>
+
+          <!-- Actions -->
+          <div class="mt-6 flex items-center gap-2">
+            <button class="flex-1 bg-dark-blue text-white py-3 rounded-xl font-bold text-sm hover:bg-blue-900 transition-all active:scale-95 shadow-lg shadow-blue-900/20">
+              Ajouter au panier
+            </button>
+            <button class="w-12 py-3 rounded-xl border border-gray-100 bg-gray-50 hover:bg-white hover:border-dark-blue text-dark-blue transition-all">
+              <i class="fas fa-eye text-sm"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    }
+  </div>
+</section>

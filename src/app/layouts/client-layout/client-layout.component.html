@@ -1,0 +1,60 @@
+<div class="min-h-screen flex flex-col ">
+  <app-aside [isOpen]="isMenuOpen()" [menuItems]="adminMenu"></app-aside>
+  <!-- Overlay -->
+  @if (isMenuOpen()) {
+    <div
+      (click)="toggleMenu()"
+      class="fixed inset-0 bg-black/40 backdrop-blur-xs z-[55] transition-opacity duration-300">
+    </div>
+  }
+  <!-- Header modifié -->
+  <header class="fixed top-0 left-0 right-0 z-50 flex items-center justify-between h-16 bg-white shadow-sm px-4 text-dark-blue">
+    <!-- Menu hamburger -->
+    <button (click)="toggleMenu()" type="button" title="Menu" class="text-dark-blue hover:text-gray-800 p-2">
+        <i class="fas fa-bars"></i>
+    </button>
+
+    <!-- Barre de recherche -->
+    <div class="flex-1 max-w-lg mx-4">
+      <div class="relative">
+        <!-- Icône de recherche Font Awesome -->
+        <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+          <i class="fas fa-search text-dark-blue"></i>
+        </div>
+        <input type="text" placeholder="Search for shops or deals..." class="bg-gray-100 border border-gray-200 text-dark-blue text-sm rounded-full focus:ring-teal focus:border-teal block w-full pl-10 p-2.5" />
+      </div>
+    </div>
+
+    <!-- Icônes de droite et profil -->
+    <div class="flex items-center space-x-4 text-xl">
+
+      <!-- Icône Cœur (J'aime/Wishlist) -->
+      <button type="button" title="mes favoris" class="text-dark-blue hover:text-gray-800 p-2">
+        <!-- Icône Cœur Font Awesome -->
+        <i class="far fa-heart"></i>
+      </button>
+
+      <!-- Icône de notification avec badge -->
+      <button type="button" title="Notifications" class="text-dark-blue hover:text-gray-800 p-2 relative">
+        <!-- Icône Notification Font Awesome -->
+        <i class="far fa-bell"></i>
+        <!-- Badge rouge (point)  -->
+        <span class="absolute top-1 right-1 block h-4 w-4 rounded-full ring-2 ring-white bg-red-500 text-[10px] text-white">1</span>
+      </button>
+
+      <!-- Photo de profil/Avatar -->
+      <app-profil-menu urlImageProfil="assets/bg-image-market.png" pathProfil="client/profil" ></app-profil-menu>
+    </div>
+  </header>
+
+  <main class="min-h-screen flex-1 p-6 mt-16">
+    <router-outlet></router-outlet>
+  </main>
+
+  <!-- Le footer original reste inchangé -->
+  <app-footer
+    titre="SHOPPING CENTER"
+    texte="Votre compagnon shopping idéal au quotidien."
+  >
+  </app-footer>
+</div>
