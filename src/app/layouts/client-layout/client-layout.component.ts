@@ -18,7 +18,8 @@ export class ClientLayoutComponent {
     { label: 'Tableau de bord', class_icon: 'fas fa-chart-line', path: '/admin/dashboard', active:false},
     { label: 'Utilisateurs', class_icon: 'fas fa-users', path: '/admin/users', active:false},
     { label: 'Infrastructure', class_icon: 'fas fa-server', path: '/admin/infra', active:true},
-    { label: 'Paramètres', class_icon: 'fas fa-cog', path: '/admin/settings', active:false }
+    { label: 'Tableau de bord', class_icon: 'fas fa-chart-line', path: '/admin/dashboard', active:false},
+    { label: 'Utilisateurs', class_icon: 'fas fa-users', path: '/admin/users', active:false}
   ];
   constructor(private renderer: Renderer2, @Inject(DOCUMENT) private document: Document) {
       //surveille le signal : desactive l'overflow de l'arriere plan quand le sidebar est activé

@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, input } from '@angular/core';
+import { Component, Input, input } from '@angular/core';
 import { AuthService } from '../../core/auth.service';
 import { Router } from '@angular/router';
 
@@ -18,6 +18,7 @@ export interface NavItem {
 export class AsideComponent {
   isOpen = input<boolean>(false);
   menuItems = input.required<NavItem[]>();
+  @Input() theme:'dark'|'light' = 'light';
   constructor(private authService: AuthService, private router: Router){}
 
   logout(){
