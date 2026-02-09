@@ -39,7 +39,7 @@ export class LoginComponent {
   submit(){
     const value = this.loginForm.getRawValue(); //Récupérer l’état brut du formulaire
     const parsed = LoginSchema.safeParse(value); // Valider les données contre le schéma métier
-    if (!parsed.success) return;
+    if (!parsed.success || this.authStore.loadingLogin() ) return;
     this.authStore.login(parsed.data.username, parsed.data.password);
 
   }

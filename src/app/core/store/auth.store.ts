@@ -16,7 +16,7 @@ export class AuthStore {
 
   private _user = signal<AuthUser | null>(null)
 
-  user = this._user.asReadonly()
+  user = this._user.asReadonly() 
 
   isAuthenticated = computed(() => !!this._user()) //valeur derive de _user
 
@@ -59,12 +59,14 @@ export class AuthStore {
   }
 
   login(email: string, password: string){
-    this._loadingRgst.set(true);
+    if (this.loadingLogin()) return;
+    this._loadingLogin.set(true);
     this.authService.login(email,password).subscribe({
       next : (res) => {
-        localStorage.setItem('token', res.token)
+        this.authService.clearVisitorKey();
+        this.authService.token = res.token
         this.setUser({ email:res.email,role:res.role })
-        this._loadingRgst.set(false)
+        this._loadingLogin.set(false)
         this._successLogin.set(true)
       },
       error : (error) => {
@@ -79,10 +81,11 @@ export class AuthStore {
     });
   }
   logout(){
-    this._loadingRgst.set(true);
+    if (this.loadingLogout()) return;
+    this._loadingLogout.set(true);
     this.authService.logout().subscribe({
       next : (res) => {
-        this._loadingRgst.set(false)
+        this._loadingLogout.set(false)
         this._successLogout.set(true)
         this.clear();
         this.authService.clearToken();
@@ -116,13 +119,11 @@ export class AuthStore {
   }
 
   register(userRegister:UserRegister){
-    if (this.loadingRgst()) {
-      return;
-    }
+    if (this.loadingRgst()) return;
     this._loadingRgst.set(true);
     this.authService.registerUser(userRegister).subscribe({
       next : (res) => {
-        localStorage.setItem('token', res.token)
+        this.authService.token=res.token
         this.setUser({ email:res.email,role:res.role })
         this._loadingRgst.set(false);
         this._successRgst.set(true);
@@ -150,14 +151,19 @@ export class AuthStore {
     this._errorLogout.set(null);
     this._successLogout.set(false);
   }
+
+  get visitorKey():string | null {
+    return this.authService.visitorKey;
+  }
+  set visitorKey(visitorKey:string){
+    this.authService.visitorKey=visitorKey;
+  }
+
+  get token():string | null {
+    return this.authService.token;
+  }
+  set token(token:string){
+    this.authService.token=token;
+  }
 }
 
-// .pipe(
-//       tap(res => {
-//         localStorage.setItem('token', res.token)
-//         this.authState.setUser({ email:res.email,role:res.role })
-//       }),
-//       catchError((error) => {
-//         console.log(error);
-//         return throwError(() => error);
-//       })
