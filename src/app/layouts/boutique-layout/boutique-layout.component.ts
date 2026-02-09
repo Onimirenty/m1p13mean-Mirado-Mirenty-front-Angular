@@ -1,8 +1,9 @@
-import { Component, DOCUMENT, effect, Inject, Renderer2, signal } from '@angular/core';
+import { Component, computed, DOCUMENT, effect, Inject, Renderer2, signal } from '@angular/core';
 import { RouterOutlet } from "@angular/router";
 import { FooterComponent } from '../footer/footer.component';
 import { NavItem, AsideComponent } from '../aside/aside.component';
 import { ProfilMenuComponent } from "../profil-menu/profil-menu.component";
+import { AsideState } from '../../store/aside/aside.state';
 
 @Component({
   selector: 'app-boutique-layout.component',
@@ -12,7 +13,7 @@ import { ProfilMenuComponent } from "../profil-menu/profil-menu.component";
 })
 export class BoutiqueLayoutComponent {
   //signal pour ouverture et fermeture du sidebar
-  isMenuOpen = signal(false);
+  isMenuOpen = computed(() => this.asideState.isOpen());
   //menu admin pour sidebar
   adminMenu: NavItem[] = [
     { label: 'Tableau de bord', class_icon: 'fas fa-chart-line', path: '/admin/dashboard', active:false},
@@ -20,7 +21,7 @@ export class BoutiqueLayoutComponent {
     { label: 'Infrastructure', class_icon: 'fas fa-server', path: '/admin/infra', active:true},
     { label: 'Paramètres', class_icon: 'fas fa-cog', path: '/admin/settings', active:false }
   ];
-  constructor(private renderer: Renderer2, @Inject(DOCUMENT) private document: Document) {
+  constructor(private renderer: Renderer2, @Inject(DOCUMENT) private document: Document,private asideState: AsideState) {
       //surveille le signal : desactive l'overflow de l'arriere plan quand le sidebar est activé
       effect(() => {
         const open = this.isMenuOpen();
@@ -32,7 +33,7 @@ export class BoutiqueLayoutComponent {
       });
   }
   toggleMenu() {
-    this.isMenuOpen.update(value => !value);
+    this.asideState.toggleMenu();
   }
 
 

@@ -1,0 +1,126 @@
+<div class="flex items-center justify-center py-10 w-full bg-gray-50 min-h-screen bg-cover" style="background-image: url(assets/bg-image-form3.png);">
+  <div class="absolute inset-0 h-screen bg-black/30 backdrop-blur-xs z-0"></div>
+  <div class="w-full z-10 max-w-md bg-white rounded-lg shadow-xl overflow-hidden mx-4">
+    <!-- Header -->
+    <div class="pt-8 text-center">
+      <p class="text-[10px] font-bold text-yellow-600 tracking-widest uppercase mb-1">Rejoindre l'écosystème</p>
+      <h2 class="text-2xl font-bold text-slate-800 flex items-center justify-center gap-2">
+        <svg xmlns="http://www.w3.org" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+        </svg>
+        <span>{{ step === 1 ? 'INFOS BOUTIQUE 1/2' : step === 2 ?  'INFOS BOUTIQUE 2/2' :'CRÉEZ VOTRE COMPTE' }}</span>
+      </h2>
+      <!-- Indicateur d'étape -->
+      <div class="flex justify-center gap-2 mt-4">
+        <div class="h-1 w-12 rounded-full transition-colors duration-300" [class]="step === 1 ? 'bg-dark-blue' : 'bg-gray-200'"></div>
+        <div class="h-1 w-12 rounded-full transition-colors duration-300" [class]="step === 2 ? 'bg-dark-blue' : 'bg-gray-200'"></div>
+        <div class="h-1 w-12 rounded-full transition-colors duration-300" [class]="step === 3 ? 'bg-dark-blue' : 'bg-gray-200'"></div>
+      </div>
+    </div>
+
+    <form [formGroup]="registerForm" (ngSubmit)="submit()" class="relative mt-8 text-dark-blue">
+      <!-- Conteneur Animé -->
+      <div class="flex transition-transform duration-100 ease-in-out" [style.transform]="step === 2 ? 'translateX(-100%)': step===3 ? 'translateX(-200%)' : 'translateX(0%)'">
+        <!-- ÉTAPE 1 : INFOS BOUTIQUE -->
+        <div class="w-full flex-shrink-0 px-8 pb-8">
+          <div class="space-y-5">
+            <!-- Nom -->
+            <small class="text-red"> {{ registerForm.get('nom')?.invalid && registerForm.get('nom')?.dirty ? registerForm.get('nom')?.errors?.['zod'] : '' }} </small>
+            <div class="relative">
+              <input trimOnBlur formControlName="nom" type="text" placeholder="Nom de la boutique" class="w-full pl-4 pr-4 py-3 border border-dark-blue rounded-lg focus:border-dark-blue focus:ring-1 focus:ring-dark-blue outline-none transition-all">
+            </div>
+            <!-- Categorie -->
+            <small class="text-red w-full"> {{ registerForm.get('categorieId')?.invalid && registerForm.get('categorieId')?.dirty ? registerForm.get('categorieId')?.errors?.['zod'] : '' }} </small>
+            <select formControlName="categorieId" class="w-full px-3 py-3 border border-dark-blue rounded-lg outline-none focus:border-dark-blue bg-white">
+              <option value="0" disabled selected>Catégorie</option>
+              @for (cat of categories(); track cat._id) { <option [value]="cat._id">{{ cat.nom }}</option> }
+            </select>
+            <!-- contact boutique -->
+            <small class="text-red"> {{ registerForm.get('contactBoutique')?.invalid && registerForm.get('contactBoutique')?.dirty ? registerForm.get('contactBoutique')?.errors?.['zod'] : '' }} </small>
+            <input trimOnBlur formControlName="contactBoutique" type="text" placeholder="Téléphone Boutique" class="w-full px-4 py-3 border border-dark-blue rounded-lg outline-none focus:border-dark-blue" >
+            <!-- logo -->
+            <small class="text-red"> {{ registerForm.get('photo')?.invalid && registerForm.get('photo')?.dirty ? registerForm.get('photo')?.errors?.['zod'] : '' }} </small>
+            @if(imgSelected.file){
+              <div class=" relative group aspect-square w-15 h-15 mb-2">
+                <img [src]="imgSelected.url" class="w-full h-full object-cover rounded border border-dark-blue shadow-sm">
+                <button type="button" (click)="removeImage()" class="absolute -top-1 -right-1 bg-red/90 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs hover:bg-red transition shadow-md">
+                  ✕
+                </button>
+              </div>
+            }@else{
+              <div class="h-15 border-2 border-dashed border-dark-blue/90 rounded-xl p-4 text-center hover:bg-dark-blue/10 transition-colors cursor-pointer relative">
+                <span class="text-xs text-gray-500 font-medium">Cliquez pour ajouter votre LOGO</span>
+                <input type="file" (change)="onFileSelected($event)" class="absolute inset-0 opacity-0 cursor-pointer">
+              </div>
+            }
+          </div>
+          <div class="flex flex-col gap-3 mt-2 space-y-4">
+            <button type="button" (click)="nextStep()" [disabled]="!isStep1Valid"
+              class="w-full mt-6 py-4 bg-dark-blue text-white font-bold rounded-lg shadow-lg hover:bg-opacity-90 disabled:bg-gray-300 disabled:shadow-none transition-all">
+              SUIVANTE <i class="fa-solid  fa-arrow-right-long"></i>
+            </button>
+            <a routerLink="/home" type="button" class="text-sm text-gray-500 font-medium hover:underline">
+              Retour à l'accueil
+            </a>
+          </div>
+        </div>
+        <!-- ÉTAPE 2 : INFOS 2 BOUTIQUE -->
+        <div class="w-full flex-shrink-0 px-8 pb-8">
+          <div class="space-y-9">
+            <!-- zone -->
+            <small class="text-red w-full"> {{ registerForm.get('zoneId')?.invalid && registerForm.get('zoneId')?.dirty ? registerForm.get('zoneId')?.errors?.['zod'] : ' ' }} </small>
+            <select formControlName="zoneId" class="w-full px-3 py-3 border border-dark-blue rounded-lg outline-none focus:border-dark-blue bg-white">
+              <option value="0" selected>Zone</option>
+              @for (zone of zones(); track zone._id) { <option [value]="zone._id">{{ zone.box+' '+zone.bloc+' '+zone.etage+' ( '+zone.description+' )' }}</option> }
+            </select>
+            <!-- horaires -->
+            <div>
+              <div class="grid grid-cols-2 gap-3">
+                <small class="text-red w-full"> {{ registerForm.get('horaires.jours')?.invalid && registerForm.get('horaires.jours')?.dirty ? registerForm.get('horaires.jours')?.errors?.['zod'] : '' }} </small>
+                <small class="text-red w-full"> {{ registerForm.get('horaires.heures')?.invalid && registerForm.get('horaires.heures')?.dirty ? registerForm.get('horaires.heures')?.errors?.['zod'] : '' }} </small>
+              </div>
+              <div formGroupName="horaires" class="grid grid-cols-2 gap-3">
+                <input trimOnBlur formControlName="jours" type="text" placeholder="Jours (Lun-Sam)" class="w-full px-4 py-3 border border-dark-blue rounded-lg outline-none focus:border-dark-blue">
+                <input trimOnBlur formControlName="heures" type="text" placeholder="Heures (08h-18h)" class="w-full px-4 py-3 border border-dark-blue rounded-lg outline-none focus:border-dark-blue">
+              </div>
+            </div>
+            <!-- description -->
+            <textarea  trimOnBlur formControlName="description" id="description" rows="3" placeholder="Description" class="w-full px-4 py-3 border border-dark-blue rounded-lg outline-none focus:border-dark-blue"></textarea>
+          </div>
+          <div class="flex flex-col gap-3 mt-8 space-y-4">
+            <button type="button" (click)="nextStep()" [disabled]="!isStep2Valid"
+              class="w-full mt-6 py-4 bg-dark-blue text-white font-bold rounded-lg shadow-lg hover:bg-opacity-90 disabled:bg-gray-300 disabled:shadow-none transition-all">
+              SUIVANTE <i class="fa-solid  fa-arrow-right-long"></i>
+            </button>
+            <button type="button" (click)="prevStep()" class="text-sm text-gray-500 font-medium hover:underline">
+              <i class="fa-solid  fa-arrow-left-long"></i> précédente
+            </button>
+          </div>
+        </div>
+
+        <!-- ÉTAPE 3 : INFOS PROPRIO -->
+        <div class="w-full flex flex-col gap-8 flex-shrink-0 px-8">
+          <div class="space-y-9">
+            <small class="text-red w-full"> {{ registerForm.get('email')?.invalid && registerForm.get('email')?.dirty ? registerForm.get('email')?.errors?.['zod'] : '' }} </small>
+            <input trimOnBlur formControlName="email" type="email" placeholder="Email professionnel" class="w-full px-4 py-3 border border-dark-blue rounded-lg outline-none focus:border-dark-blue">
+            <small class="text-red w-full"> {{ registerForm.get('password')?.invalid && registerForm.get('password')?.dirty ? registerForm.get('password')?.errors?.['zod'] : '' }} </small>
+            <input trimOnBlur formControlName="password" type="password" placeholder="Mot de passe" class="w-full px-4 py-3 border border-dark-blue rounded-lg outline-none focus:border-dark-blue">
+            <small class="text-red w-full"> {{ registerForm.get('contactProprio')?.invalid && registerForm.get('contactProprio')?.dirty ? registerForm.get('contactProprio')?.errors?.['zod'] : '' }} </small>
+            <input trimOnBlur formControlName="contactProprio" type="text" placeholder="Téléphone Gérant" class="w-full px-4 py-3 border border-dark-blue rounded-lg outline-none focus:border-dark-blue">
+          </div>
+
+          <div class="flex flex-col gap-3 mt-8 space-y-4">
+            <button type="submit" [disabled]="registerForm.invalid"
+              class="w-full py-4 bg-dark-blue/90 text-white font-bold rounded-lg shadow-lg hover:bg-dark-blue disabled:bg-gray-300 transition-all">
+              CRÉER MON COMPTE
+            </button>
+            <button type="button" (click)="prevStep()" class="text-sm text-gray-500 font-medium hover:underline">
+              <i class="fa-solid  fa-arrow-left-long"></i> précédente
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </form>
+  </div>
+</div>

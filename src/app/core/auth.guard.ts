@@ -1,32 +1,29 @@
 import { Injectable } from '@angular/core';
 import { CanActivate, Router, ActivatedRouteSnapshot } from '@angular/router';
 import { AuthService } from './auth.service';
+import { AuthStore } from './store/auth.store';
 
 @Injectable({ providedIn: 'root' })
 export class AuthGuard implements CanActivate {
-  constructor(private auth: AuthService, private router: Router) {}
+  constructor(private authStore: AuthStore,private auth: AuthService, private router: Router) {}
 
   //pour securiser chaque route selon le role de chaque utilisateur
   canActivate(route: ActivatedRouteSnapshot): boolean {
-    const expectedRole = route.data['role'];
+    const expectedRoles = route.data['roles'];
 
     //si l'utilisateur n'est pas connecté il reviens vers login
-    if (!this.auth.isLoggedIn()) {
+    if (!this.authStore.isAuthenticated) {
       this.router.navigate(['/login']);
       return false;
     }
 
+    const userRole = this.authStore.role();
 
-    const role = this.auth.getRole();
-    if (expectedRole && role !== expectedRole) {
-      // Redirige vers la page correct s'il tente d'aller a une page qui ne correspond pas a son role
-      switch (role) {
-        case 'admin': this.router.navigate(['/admin']); break;
-        case 'boutique': this.router.navigate(['/boutique']); break;
-        case 'client': this.router.navigate(['/client']); break;
-      }
-      return false;
+    if (expectedRoles && !expectedRoles.includes(userRole!) ) { //si le route est defini à des rôles mais que le rôle de l'utilisateur n'y est pas inclu ==> refusé
+      this.router.navigate(['/unauthorized'])
+      return false
     }
+
 
     return true;
   }
