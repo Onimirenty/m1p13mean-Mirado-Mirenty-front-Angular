@@ -1,8 +1,9 @@
-import { Component, effect, Input, signal } from '@angular/core';
+import { Component, effect, Input, Signal, signal } from '@angular/core';
 import { AsideState } from '../../store/aside/aside.state';
 import { Router } from '@angular/router';
 import { NotificationService } from '../../shared/services/notification.service';
 import { AuthStore } from '../../core/store/auth.store';
+import { AuthUser } from '../../core/auth.model';
 
 @Component({
   selector: 'app-profil-menu',
@@ -14,7 +15,9 @@ export class ProfilMenuComponent {
   @Input() urlImageProfil:string|null = null;
   @Input() pathProfil:string = "#";
   isProfileOpen = signal(false);
+  readonly user!: Signal<AuthUser | null>;
   constructor(private authStore : AuthStore,private asideState:AsideState, private router:Router, private notificationService:NotificationService){
+    this.user = this.authStore.user;
     effect(() => {
       if (this.authStore.successLogout()) {
         this.asideState.clear();

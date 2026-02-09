@@ -52,25 +52,6 @@ export class AuthService {
     return this.http.post<LoginResponse>(`${this.API_URL}/register-client`,userRegister, {context: new HttpContext().set(NO_AUTH, true) });
   }
 
-  // restoreUserSession(){
-  //   if(this.token){
-  //     return firstValueFrom(
-  //           this.http.get<any>('/api/me').pipe(
-  //             tap(res => this.authStore.setUser({ email:res.email,role:res.role })),
-  //             catchError(() => {
-  //               if(this.token){
-  //                 this.clearToken();
-  //                 this.router.navigateByUrl('/login');
-  //               }else{
-  //                 this.authStore.setUser({ email:'',role:'VISITOR' });
-  //               }
-  //               return of(null);
-  //             })
-  //           )
-  //         );
-  //   }
-  // }
-
   restoreUserSession():Observable<any> {
     return this.http.get<any>(`${this.API_URL}/me`,/*juste atao eto fotsiny pour teste */this.token);
   }
@@ -80,9 +61,25 @@ export class AuthService {
     return localStorage.getItem('token')
   }
 
+  set token(token:string){
+    localStorage.setItem('token',token);
+  }
+
   clearToken(){
-    localStorage.removeItem('visitorKey');
     localStorage.removeItem('token');
   }
+  clearVisitorKey(){
+    sessionStorage.removeItem('visitorKey');
+  }
+
+  get visitorKey(): string | null{
+    return sessionStorage.getItem('visitorKey');
+  }
+
+  set visitorKey(visitorKey:string){
+    sessionStorage.setItem('visitorKey',visitorKey);
+  }
+
+
 
 }
