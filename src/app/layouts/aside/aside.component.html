@@ -19,7 +19,7 @@
         [class]="theme==='light'?'text-dark-blue bg-white':''"> <!-- Limite la hauteur sur mobile pour ne pas couvrir tout l'écran -->
 
     @for (menuItem of menuItems(); let i = $index ;track i) {
-      <a [href]="menuItem.path"
+      <div [routerLink]="menuItem.path"
         [ngClass]="{
             'bg-yellow/20 ': menuItem.active && theme==='dark',
             'bg-dark-blue/20 ': menuItem.active && theme==='light'
@@ -42,7 +42,7 @@
         </div>
 
         <span class="text-[10px] md:text-base font-medium truncate">{{ menuItem.label }}</span>
-      </a>
+      </div>
     }
   </nav>
 
