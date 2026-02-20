@@ -19,7 +19,7 @@ export class NotificationService {
     this.show(message, 'error-snackbar');
   }
 
-  showSuccess(message: string) {
-    this.show(message, 'success-snackbar', 2000);
+  showSuccess(message: string, duration = 2000  ) {
+    this.show(message, 'success-snackbar', duration);
   }
 }
