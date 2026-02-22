@@ -10,6 +10,7 @@ import { BoutiqueLayoutComponent } from './layouts/boutique-layout/boutique-layo
 import { HomeComponent } from './shared/components/home/home.component';
 import { RegisterBoutiqueComponent } from './shared/components/register-boutique.component/register-boutique.component';
 import { RegisterUserComponent } from './shared/components/register-user.component/register-user.component';
+import { DashboardAdminComponent } from './features/admin/dashboard-admin/dashboard-admin.component';
 
 export const routes: Routes =  [
   { path: 'home', component: HomeComponent },
@@ -21,7 +22,8 @@ export const routes: Routes =  [
     path: 'admin', component: AdminLayoutComponent, canActivate: [AuthGuard], data: { roles: ['ADMIN'] },
     children:[
       {path:'',component:AdminHomeComponent},
-      {path:'home',component:AdminHomeComponent}
+      {path:'home',component:AdminHomeComponent},
+      {path:'dashboard',component:DashboardAdminComponent}
     ]
   },
   //BOUTIQUE

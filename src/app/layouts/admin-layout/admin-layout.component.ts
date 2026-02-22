@@ -17,7 +17,7 @@ export class AdminLayoutComponent {
   //menu admin pour sidebar
   adminMenu: NavItem[] = [
     { label: 'Home', class_icon: 'fas fa-chart-line', path: '/admin/home', active:false},
-    { label: 'Utilisateurs', class_icon: 'fas fa-users', path: '/admin/users', active:false},
+    { label: 'Tableau de bord', class_icon: 'fas fa-chart-line', path: '/admin/dashboard', active:false},
     { label: 'Infrastructure', class_icon: 'fas fa-server', path: '/admin/infra', active:true},
     { label: 'Paramètres', class_icon: 'fas fa-cog', path: '/admin/settings', active:false }
   ];
