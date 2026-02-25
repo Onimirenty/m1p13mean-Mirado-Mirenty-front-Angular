@@ -16,7 +16,8 @@ export class AdminLayoutComponent {
   isMenuOpen = computed(() => this.asideState.isOpen());
   //menu admin pour sidebar
   menus = signal<NavItem[]> ([
-    { label: 'Tableau de bord', class_icon: 'fas fa-chart-line', path: '/admin/dashboard', active:false}
+    { label: 'Profil Centre', class_icon: 'fas fa-store', path: '/admin/center', active: true },
+    { label: 'Tableau de bord', class_icon: 'fas fa-chart-line', path: '/admin/dashboard', active:false},
   ]);
   constructor(private renderer: Renderer2, @Inject(DOCUMENT) private document: Document,private asideState: AsideState) {
       //surveille le signal : desactive l'overflow de l'arriere plan quand le sidebar est activé
