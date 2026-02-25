@@ -34,12 +34,12 @@ Chart.register(
 })
 export class VisitorsChartComponent implements OnChanges {
 
-  @Input() visitors!: {
+  @Input() visitors: {
     type: string;
     from: string;
     to: string;
     data: { date: string; count: number }[];
-  };
+  }| undefined;
 
   public lineChartType: 'line' = 'line';
 
@@ -63,6 +63,14 @@ export class VisitorsChartComponent implements OnChanges {
   }
 
   private buildChart(): void {
+    if(!this.visitors){
+      this.visitors={
+        type: '',
+        from: '',
+        to: '',
+        data: []
+      };
+    }
     const labels = this.visitors.data.map(d =>
       new Date(d.date).toLocaleDateString('fr-FR', {
         day: '2-digit',

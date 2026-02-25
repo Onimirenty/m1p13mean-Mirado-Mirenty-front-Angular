@@ -19,12 +19,12 @@
         [class]="theme==='light'?'text-dark-blue bg-white':''"> <!-- Limite la hauteur sur mobile pour ne pas couvrir tout l'écran -->
 
     @for (menuItem of menuItems(); let i = $index ;track i) {
-      <div [routerLink]="menuItem.path"
+      <div (click)="clickMenu(menuItem.path,i)"
         [ngClass]="{
             'bg-yellow/20 ': menuItem.active && theme==='dark',
             'bg-dark-blue/20 ': menuItem.active && theme==='light'
             }"
-         [class]="theme==='light'?'hover:bg-dark-blue/20':'hover:bg-yellow/20'"
+        [class]="theme==='light'?'hover:bg-dark-blue/20':'hover:bg-yellow/20'"
          class="group flex flex-col md:flex-row items-center gap-1 md:gap-4
                 px-4 py-2 md:px-4 md:py-3 rounded-xl
                 transition-all duration-200

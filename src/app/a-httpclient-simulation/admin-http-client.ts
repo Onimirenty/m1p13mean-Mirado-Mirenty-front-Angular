@@ -35,7 +35,7 @@ export class AdminHttpClient {
     // }
 
     // ======================================================================= STATS SUR 7 JOURS
-    if (url === `${this.API_URL}/stats/center` && param?.period === '7d') {
+    if (url === `${this.API_URL}/stats/center` && param.get('period') === '7d') {
       const response: StatsResponse = {
         nbBoutiqueActive: 25,
         nbPromotionEnCours: 12,

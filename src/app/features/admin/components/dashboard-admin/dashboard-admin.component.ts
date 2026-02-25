@@ -1,6 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, computed, effect, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { VisitorsChartComponent } from '../visitors-chart.component/visitors-chart.component';
+import { AdminStore } from '../../store/admin.store';
+import { NotificationService } from '../../../../shared/services/notification.service';
 
 export interface Boutique {
   _id: string;
@@ -31,30 +33,32 @@ export interface DashboardStats {
   templateUrl: './dashboard-admin.component.html',
   styleUrl: './dashboard-admin.component.scss',
 })
-export class DashboardAdminComponent {
-  public data: DashboardStats = {
-    nbBoutiqueActive: 25,
-    nbPromotionEnCours: 12,
-    nbUserClient: 340,
-    topBoutique: [
-      { _id: "b1", nom: "Shop Fashion" },
-      { _id: "b2", nom: "Tech Store" }
-    ],
-    visitors: {
-      type: "daily",
-      from: "2026-01-29",
-      to: "2026-02-04 ",
-      data: [
-        { date: "2026-01-29", count: 120 },
-        { date: "2026-01-30", count: 135 },
-        { date: "2026-01-31", count: 98 },
-        { date: "2026-02-01", count: 150 },
-        { date: "2026-02-02", count: 170 },
-        { date: "2026-02-03", count: 200 },
-        { date: "2026-02-04", count: 180 }
-      ]
-    }
-  };
+export class DashboardAdminComponent implements OnInit {
+  //  data: DashboardStats = {
+  //    nbBoutiqueActive: 0,
+  //    nbPromotionEnCours: 0,
+  //    nbUserClient: 0,
+  //    topBoutique: [],
+  //    visitors: {
+  //      type: '',
+  //      from: '',
+  //      to: '',
+  //      data: []
+  //    }
+  //  };
+   data = computed(()=>this.adminStore.dashboard());
+  constructor(private adminStore:AdminStore, private notificationService:NotificationService){
+    effect(() => {
+      if (this.adminStore.errorState()) {
+        this.notificationService.showError(this.adminStore.errorState()!);
+        this.adminStore.resetStatus();
+      }
+    });
+  }
+
+  ngOnInit() {
+    this.adminStore.statistics(7);
+  }
 }
 /*
 for (int i=0 ; i<100; i++){
