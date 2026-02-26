@@ -12,6 +12,9 @@ import { RegisterBoutiqueComponent } from './shared/components/register-boutique
 import { RegisterUserComponent } from './shared/components/register-user.component/register-user.component';
 import { DashboardAdminComponent } from './features/admin/components/dashboard-admin/dashboard-admin.component';
 import { CenterProfilComponent } from './features/admin/components/center-profil/center-profil.component';
+import { ZonesComponents } from './features/admin/components/zones/zones.components';
+import { CategoriesComponent } from './features/admin/components/categories.component/categories.component';
+import { BoutiquesComponents } from './features/admin/components/boutiques/boutiques.components';
 
 export const routes: Routes =  [
   { path: 'home', component: HomeComponent },
@@ -24,7 +27,10 @@ export const routes: Routes =  [
     children:[
       {path:'',component:CenterProfilComponent},
       {path:'center',component:CenterProfilComponent},
-      {path:'dashboard',component:DashboardAdminComponent}
+      {path:'dashboard',component:DashboardAdminComponent},
+      {path:'zones',component:ZonesComponents},
+      {path:'categories',component:CategoriesComponent},
+      {path:'boutiques',component:BoutiquesComponents}
     ]
   },
   //BOUTIQUE

@@ -25,15 +25,6 @@ export class AdminHttpClient {
 
   get<T>(url: string, param?: any, header?: any): Observable<T> {
 
-    // 🔐 Vérification du token Bearer
-    // const authHeader = header?.Authorization || header?.authorization;
-    // if (!authHeader || !authHeader.startsWith('Bearer ')) {
-    //   return throwError(() => ({
-    //     status: 401,
-    //     message: 'Token manquant ou invalide'
-    //   })).pipe(delay(500));
-    // }
-
     // ======================================================================= STATS SUR 7 JOURS
     if (url === `${this.API_URL}/stats/center` && param.get('period') === '7d') {
       const response: StatsResponse = {

@@ -27,15 +27,15 @@ export class CenterProfilComponent implements OnInit {
   isEditModalOpen = signal(false);
 
   constructor(private renderer: Renderer2, @Inject(DOCUMENT) private document: Document) {
-      //surveille le signal : desactive l'overflow de l'arriere plan quand le sidebar est activé
-      effect(() => {
-        const open = this.isEditModalOpen();
-        if (open) {
-          this.renderer.addClass(this.document.body, 'overflow-hidden');
-        } else {
-          this.renderer.removeClass(this.document.body, 'overflow-hidden');
-        }
-      });
+    //surveille le signal : desactive l'overflow de l'arriere plan quand le sidebar est activé
+    effect(() => {
+      const open = this.isEditModalOpen();
+      if (open) {
+        this.renderer.addClass(this.document.body, 'overflow-hidden');
+      } else {
+        this.renderer.removeClass(this.document.body, 'overflow-hidden');
+      }
+    });
   }
 
   // Gestion du Zoom (Progressif)
@@ -66,11 +66,9 @@ export class CenterProfilComponent implements OnInit {
     this.isDragging = false;
   }
 
-  
+  handleUpdate(event: {data: any, file?: File}) {
 
-handleUpdate(event: {data: any, file?: File}) {
-
-}
+  }
 
 
   // Dans un cas réel, injectez votre service de données ici
