@@ -1,8 +1,8 @@
 import { Component, computed, effect, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { VisitorsChartComponent } from '../visitors-chart.component/visitors-chart.component';
-import { AdminStore } from '../../store/admin.store';
-import { NotificationService } from '../../../../shared/services/notification.service';
+import { AdminStore } from '../../../store/admin.store';
+import { NotificationService } from '../../../../../shared/services/notification.service';
 
 export interface Boutique {
   _id: string;

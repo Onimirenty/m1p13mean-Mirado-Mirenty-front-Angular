@@ -3,7 +3,7 @@ import { environment } from '../../../../environments/environement';
 import { AdminHttpClient } from '../../../a-httpclient-simulation/admin-http-client';
 import { Observable } from 'rxjs';
 import { HttpParams } from '@angular/common/http';
-import { DashboardStats } from '../components/dashboard-admin/dashboard-admin.component';
+import { DashboardStats } from '../components/dashboard/dashboard-admin/dashboard-admin.component';
 
 @Injectable({
   providedIn: 'root',

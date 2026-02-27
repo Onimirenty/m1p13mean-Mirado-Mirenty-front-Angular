@@ -1,6 +1,6 @@
 import { Injectable, signal, computed } from '@angular/core'
 import { catchError, firstValueFrom, of, tap } from 'rxjs'
-import { DashboardStats } from '../components/dashboard-admin/dashboard-admin.component'
+import { DashboardStats } from '../components/dashboard/dashboard-admin/dashboard-admin.component'
 import { StatisticsAdminService } from '../services/statistics-admin.service';
 
 export interface UserRegister{

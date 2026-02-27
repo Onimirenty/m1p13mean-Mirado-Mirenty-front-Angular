@@ -1,7 +1,7 @@
 import { Routes } from '@angular/router';
 import { LoginComponent } from './shared/components/login/login.component';
 import { AdminHomeComponent } from './features/admin/components/admin-home/admin-home.component';
-import { BoutiqueHomeComponent } from './features/boutique/boutique-home/boutique-home.component';
+import { BoutiqueHomeComponent } from './features/boutique/components/boutique-home/boutique-home.component';
 import { ClientHomeComponent } from './features/client/client-home/client-home.component';
 import { AuthGuard } from './core/auth.guard';
 import { AdminLayoutComponent } from './layouts/admin-layout/admin-layout.component';
@@ -10,14 +10,14 @@ import { BoutiqueLayoutComponent } from './layouts/boutique-layout/boutique-layo
 import { HomeComponent } from './shared/components/home/home.component';
 import { RegisterBoutiqueComponent } from './shared/components/register-boutique.component/register-boutique.component';
 import { RegisterUserComponent } from './shared/components/register-user.component/register-user.component';
-import { DashboardAdminComponent } from './features/admin/components/dashboard-admin/dashboard-admin.component';
-import { CenterProfilComponent } from './features/admin/components/center-profil/center-profil.component';
-import { ZonesComponents } from './features/admin/components/zones/zones.components';
-import { CategoriesComponent } from './features/admin/components/categories/categories.component';
+import { DashboardAdminComponent } from './features/admin/components/dashboard/dashboard-admin/dashboard-admin.component';
+import { CenterProfilComponent } from './features/admin/components/profil-center/center-profil/center-profil.component';
+import { ZonesComponents } from './features/admin/components/zone/zones/zones.components';
+import { CategoriesComponent } from './features/admin/components/categorie/categories/categories.component';
 import { BoutiquesComponents } from './features/admin/components/boutiques/boutiques.components';
 import { PromotionsComponent } from './features/admin/components/promotions/promotions.component';
-import { AnnoncesComponent } from './features/admin/components/annonces/annonces.component';
-import { BoutiqueDashboardComponent } from './features/boutique/boutique-dashboard/boutique-dashboard.component';
+import { AnnoncesComponent } from './features/admin/components/annonce/annonces/annonces.component';
+import { BoutiqueDashboardComponent } from './features/boutique/components/boutique-dashboard/boutique-dashboard.component';
 
 export const routes: Routes =  [
   { path: 'home', component: HomeComponent },
