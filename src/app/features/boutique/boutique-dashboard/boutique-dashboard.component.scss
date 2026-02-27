@@ -1,0 +1,22 @@
+/* Pour masquer la scrollbar tout en gardant le défilement */
+.scrollbar-hide {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+  &::-webkit-scrollbar {
+    display: none; /* Chrome, Safari and Opera */
+  }
+}
+
+.snap-x {
+  scroll-snap-type: x mandatory;
+}
+
+.snap-start {
+  scroll-snap-align: start;
+}
+.scrollbar-hide {
+  -ms-overflow-style: none; scrollbar-width: none;
+  &::-webkit-scrollbar { display: none; }
+}
+.snap-inline { scroll-snap-type: x mandatory; }
+.snap-item { scroll-snap-align: start; }

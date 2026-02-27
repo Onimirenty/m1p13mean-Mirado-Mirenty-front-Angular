@@ -13,10 +13,11 @@ import { RegisterUserComponent } from './shared/components/register-user.compone
 import { DashboardAdminComponent } from './features/admin/components/dashboard-admin/dashboard-admin.component';
 import { CenterProfilComponent } from './features/admin/components/center-profil/center-profil.component';
 import { ZonesComponents } from './features/admin/components/zones/zones.components';
-import { CategoriesComponent } from './features/admin/components/categories.component/categories.component';
+import { CategoriesComponent } from './features/admin/components/categories/categories.component';
 import { BoutiquesComponents } from './features/admin/components/boutiques/boutiques.components';
 import { PromotionsComponent } from './features/admin/components/promotions/promotions.component';
 import { AnnoncesComponent } from './features/admin/components/annonces/annonces.component';
+import { BoutiqueDashboardComponent } from './features/boutique/boutique-dashboard/boutique-dashboard.component';
 
 export const routes: Routes =  [
   { path: 'home', component: HomeComponent },
@@ -41,7 +42,8 @@ export const routes: Routes =  [
   { path: 'boutique', component: BoutiqueLayoutComponent, canActivate: [AuthGuard], data: { roles: ['BOUTIQUE'] },
     children:[
       {path:'',component:BoutiqueHomeComponent},
-      {path:'home',component:BoutiqueHomeComponent}
+      {path:'home',component:BoutiqueHomeComponent},
+      {path:'dashboard',component: BoutiqueDashboardComponent}
     ]
   },
   //CLIENT

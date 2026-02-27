@@ -1,0 +1,253 @@
+<div class="max-w-7xl mx-auto px-4 md:px-10 py-10 space-y-16 bg-gradient-to-br from-slate-50 via-white to-slate-100 min-h-screen">
+
+  <!-- 1. SECTION PROMOTIONS (Carrousel) -->
+ <section class="space-y-8">
+
+  <div class="flex items-center justify-between">
+    <div>
+      <h2 class="text-2xl font-semibold text-slate-800 tracking-tight">
+        Mes Promotions
+      </h2>
+      <p class="text-sm text-slate-500">
+        Gestion complète de vos campagnes promotionnelles
+      </p>
+    </div>
+
+    <div class="flex gap-2">
+      <button (click)="scroll('promo-list', -300)"
+        class="w-9 h-9 rounded-full bg-white border border-slate-200 hover:bg-slate-800 hover:text-white transition shadow-sm flex items-center justify-center">
+        <i class="fas fa-chevron-left text-xs"></i>
+      </button>
+
+      <button (click)="scroll('promo-list', 300)"
+        class="w-9 h-9 rounded-full bg-white border border-slate-200 hover:bg-slate-800 hover:text-white transition shadow-sm flex items-center justify-center">
+        <i class="fas fa-chevron-right text-xs"></i>
+      </button>
+    </div>
+  </div>
+
+  <div id="promo-list" class="flex gap-8 overflow-x-auto snap-x scrollbar-hide pb-6">
+
+    @for (promo of promotions(); track promo._id) {
+
+      <div class="flex-none w-96 snap-start group">
+
+        <div class="bg-white rounded-3xl border border-slate-200 overflow-hidden transition duration-500 hover:shadow-2xl hover:-translate-y-1">
+
+          <!-- IMAGE -->
+          <div class="relative h-52 overflow-hidden">
+
+            <img [src]="promo.imageUrl"
+              class="w-full h-full object-cover transition duration-700 group-hover:scale-110">
+
+            <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
+
+            <!-- TAUX -->
+            <span class="absolute top-4 left-4 px-3 py-1 text-xs font-semibold bg-red-500 text-white rounded-full shadow">
+              -{{promo.taux}}%
+            </span>
+
+            <!-- STATUS -->
+            <span
+              class="absolute top-4 right-4 px-3 py-1 text-xs font-medium rounded-full bg-white/90 backdrop-blur shadow border"
+              [class.text-emerald-600]="promo.status === 'VALIDEE'"
+              [class.text-orange-500]="promo.status === 'EN_ATTENTE'"
+              [class.text-red-500]="promo.status === 'REFUSEE'">
+              {{promo.status}}
+            </span>
+
+            <!-- VUES -->
+            <div class="absolute bottom-4 right-4 flex items-center gap-1 text-white text-xs bg-black/40 px-2 py-1 rounded-full backdrop-blur">
+              <i class="fas fa-eye text-[10px]"></i>
+              {{promo.vues}}
+            </div>
+          </div>
+
+          <!-- CONTENT -->
+          <div class="p-6 space-y-4">
+
+            <!-- TITRE -->
+            <h3 class="font-semibold text-slate-800 text-lg">
+              {{promo.titre}}
+            </h3>
+
+            <!-- DESCRIPTION -->
+            <p class="text-sm text-slate-500 leading-relaxed line-clamp-2">
+              {{promo.description}}
+            </p>
+
+            <!-- PRIX -->
+            <div class="flex items-center gap-4">
+              <span class="text-2xl font-bold text-slate-900">
+                {{promo.prixReduit}} Ar
+              </span>
+              <span class="text-sm text-slate-400 line-through">
+                {{promo.prixInitial}} Ar
+              </span>
+            </div>
+
+            <!-- DATES -->
+            <div class="text-xs text-slate-500 flex justify-between border-t pt-3">
+
+              <div class="flex items-center gap-2">
+                <i class="fas fa-calendar-alt text-slate-400"></i>
+                <span>
+                  {{promo.dateDebut}} → {{promo.dateFin}}
+                </span>
+              </div>
+
+              <div>
+                Créée le {{promo.createdAt }}
+              </div>
+
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+    }
+
+  </div>
+</section>
+  <!-- 2. SECTION STATISTIQUES (Grid) -->
+<section class="grid grid-cols-1 md:grid-cols-2 gap-8">
+
+  <div class="bg-white rounded-3xl p-8 border border-slate-200 shadow-sm hover:shadow-lg transition">
+
+    <div class="flex justify-between items-center mb-6">
+      <p class="text-sm font-medium text-slate-500">
+        Visibilité Boutique
+      </p>
+      <i class="fas fa-eye text-slate-300 text-xl"></i>
+    </div>
+
+    <h3 class="text-4xl font-bold text-slate-900">
+      {{stats().vues}}
+    </h3>
+
+    <p class="text-sm text-slate-400 mt-2">
+      Vues totales enregistrées
+    </p>
+  </div>
+
+
+  <div class="bg-white rounded-3xl p-8 border border-slate-200 shadow-sm hover:shadow-lg transition">
+
+    <div class="flex justify-between items-center mb-6">
+      <p class="text-sm font-medium text-slate-500">
+        Engagement Client
+      </p>
+      <i class="fas fa-mouse-pointer text-slate-300 text-xl"></i>
+    </div>
+
+    <h3 class="text-4xl font-bold text-slate-900">
+      {{stats().promoClics}}
+    </h3>
+
+    <p class="text-sm text-slate-400 mt-2">
+      Clics sur promotions
+    </p>
+  </div>
+
+</section>
+
+  <!-- 3. SECTION PRODUITS PHARES (Carrousel) -->
+<section class="space-y-8">
+
+  <div class="flex items-center justify-between">
+    <h2 class="text-2xl font-semibold text-slate-800">
+      Produits Phares
+    </h2>
+
+    <div class="flex gap-2">
+      <button (click)="scroll('prod-list', -300)" class="p-2 text-slate-400 hover:text-slate-800 transition">
+        <i class="fas fa-arrow-left"></i>
+      </button>
+
+      <button (click)="scroll('prod-list', 300)" class="p-2 text-slate-400 hover:text-slate-800 transition">
+        <i class="fas fa-arrow-right"></i>
+      </button>
+    </div>
+  </div>
+
+  <div id="prod-list" class="flex gap-8 overflow-x-auto snap-x scrollbar-hide pb-6">
+
+    @for (prod of produits(); track prod._id) {
+      <div class="flex-none w-64 snap-start group">
+
+        <div class="bg-white rounded-3xl p-6 border border-slate-200 hover:shadow-xl hover:-translate-y-1 transition duration-500">
+
+          <img [src]="prod.imageUrl"
+            class="w-full aspect-square object-contain mb-5 transition group-hover:scale-105">
+
+          <h4 class="font-semibold text-slate-800 text-sm mb-1">
+            {{prod.nom}}
+          </h4>
+
+          <p class="text-xs text-slate-400 mb-3 line-clamp-2">
+            {{prod.description}}
+          </p>
+
+          <p class="text-lg font-bold text-slate-900">
+            {{prod.prix}} Ar
+          </p>
+
+        </div>
+      </div>
+    }
+
+  </div>
+</section>
+
+  <!-- 4. SECTION ANNONCES (Horizontal Card Carrousel) -->
+<section class="space-y-8">
+
+  <div class="flex items-center justify-between">
+    <h2 class="text-2xl font-semibold text-slate-800">
+      Annonces du Centre
+    </h2>
+
+    <div class="flex gap-2">
+      <button (click)="scroll('ann-list', -450)" class="p-2 text-slate-400 hover:text-slate-800 transition">
+        <i class="fas fa-arrow-left"></i>
+      </button>
+      <button (click)="scroll('ann-list', 450)" class="p-2 text-slate-400 hover:text-slate-800 transition">
+        <i class="fas fa-arrow-right"></i>
+      </button>
+    </div>
+  </div>
+
+  <div id="ann-list" class="flex gap-8 overflow-x-auto snap-x scrollbar-hide pb-10">
+
+    @for (ann of annonces(); track ann._id) {
+
+      <div class="flex-none w-full md:w-[420px] snap-start">
+
+        <div class="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm hover:shadow-xl transition duration-500 h-full">
+
+          <!-- DATE -->
+          <span class="inline-block mb-4 px-3 py-1 text-xs font-medium bg-slate-100 text-slate-500 rounded-full">
+            {{ ann.createdAt  }}
+          </span>
+
+          <!-- TITLE -->
+          <h3 class="text-lg font-semibold text-slate-800 mb-3">
+            {{ ann.title }}
+          </h3>
+
+          <!-- CONTENT -->
+          <p class="text-sm text-slate-500 leading-relaxed line-clamp-3">
+            {{ ann.content }}
+          </p>
+
+        </div>
+      </div>
+
+    }
+
+  </div>
+</section>
+
+
+</div>
