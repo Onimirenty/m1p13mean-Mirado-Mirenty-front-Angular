@@ -1,0 +1,128 @@
+<div class="h-screen flex flex-col bg-[#FDFDFD]">
+  <!-- HEADER FIXE -->
+  <header class="flex-shrink-0 z-20 bg-white/80 backdrop-blur-xl border-b border-slate-100 px-6 py-6">
+    <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
+      <div class="flex items-center gap-4">
+        <div class="w-12 h-12 bg-dark-blue rounded-2xl flex items-center justify-center text-yellow shadow-xl shadow-dark-blue/20">
+          <i class="fas fa-percentage text-xl"></i>
+        </div>
+        <div>
+          <h1 class="text-2xl font-black text-dark-blue tracking-tighter italic">Modération Offres</h1>
+          <p class="text-[9px] font-black text-slate-400 uppercase tracking-[3px] mt-1 italic">Validation des campagnes</p>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-4">
+        <div class="px-6 py-2 bg-orange/5 border border-orange/10 rounded-2xl flex items-center gap-3">
+          <span class="w-2 h-2 bg-orange rounded-full animate-pulse"></span>
+          <span class="text-[10px] font-black text-orange uppercase tracking-widest">{{ pendingCount() }} À valider</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- LISTE DES PROMOS (SCROLLABLE) -->
+  <main class="flex-1 overflow-y-auto p-6 md:p-10">
+    <div class="max-w-7xl mx-auto grid grid-cols-1 xl:grid-cols-2 gap-8 pb-20">
+
+      @for (promo of promotions(); track promo._id) {
+        <div class="bg-white rounded-[2.5rem] border border-slate-100 overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-500 group flex flex-col md:flex-row">
+
+          <!-- IMAGE & TAUX -->
+          <div class="relative w-full md:w-56 h-64 md:h-auto overflow-hidden">
+            <img [src]="promo.imageUrl" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+            <div class="absolute top-4 left-4 px-3 py-1 bg-red text-white text-xs font-black rounded-lg shadow-lg">
+              -{{ promo.taux }}%
+            </div>
+          </div>
+
+          <!-- CONTENU & INFOS -->
+          <div class="flex-1 p-8 flex flex-col justify-between">
+            <div class="space-y-4">
+              <div class="flex justify-between items-start">
+                <div>
+                  <h3 class="text-2xl font-black text-dark-blue tracking-tight leading-none">{{ promo.titre }}</h3>
+                </div>
+                <!-- Badge Statut -->
+                <span [class]="{
+                  'bg-orange/10 text-orange border-orange/20': promo.status === 'EN_ATTENTE',
+                  'bg-teal/10 text-teal border-teal/20': promo.status === 'VALIDEE',
+                  'bg-red/10 text-red border-red/20': promo.status === 'REFUSEE'
+                }" class="px-3 py-1 rounded-full text-[8px] font-black uppercase tracking-widest border">
+                  {{ promo.status }}
+                </span>
+              </div>
+
+              <p class="text-sm text-slate-400 font-medium line-clamp-2 italic">"{{ promo.description }}"</p>
+
+              <!-- PRIX & DATES -->
+              <div class="py-4 bg-slate-50/50 rounded-2xl px-6 border border-slate-100 transition-all duration-500">
+
+                <!-- Vérification de l'existence des prix pour le layout -->
+                <div [class]="(promo.prixInitial && promo.prixInitial > 0) ? 'grid grid-cols-2 gap-4' : 'block'">
+
+                  <!-- SECTION PRIX : Affichée seulement si prixInitial est présent et > 0 -->
+                  @if (promo.prixInitial && promo.prixInitial > 0) {
+                    <div class="border-r border-slate-200/50 pr-4">
+                      <p class="text-[9px] font-black text-slate-300 uppercase tracking-widest italic">Offre actuelle</p>
+
+                      <div class="flex flex-col">
+                        <!-- Prix Réduit ou Gratuit -->
+                        <p class="text-lg font-black text-dark-blue leading-tight">
+                          {{ (promo.prixReduit && promo.prixReduit > 0) ? (promo.prixReduit ) + ' Ar' : 'Gratuit' }}
+                        </p>
+
+                        <!-- Prix Initial barré -->
+                        <p class="text-[10px] text-slate-400 line-through font-bold opacity-60 italic">
+                          {{ promo.prixInitial  }} Ar
+                        </p>
+                      </div>
+                    </div>
+                  }
+
+                  <!-- SECTION PÉRIODE : S'adapte si le prix est absent -->
+                  <div [class.pl-4]="(promo.prixInitial && promo.prixInitial > 0)">
+                    <div class="flex items-center gap-2 mb-1">
+                      <i class="far fa-calendar-alt text-[9px] text-teal"></i>
+                      <p class="text-[9px] font-black text-slate-300 uppercase tracking-widest">Validité</p>
+                    </div>
+
+                    <div class="flex flex-wrap items-center gap-x-2">
+                      <p class="text-[11px] font-bold text-dark-blue">Du {{ promo.dateDebut  }}</p>
+                      <span class="text-slate-300 text-[10px]">→</span>
+                      <p class="text-[11px] font-bold text-teal italic">Au {{ promo.dateFin  }}</p>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+
+            </div>
+
+            <!-- ACTIONS -->
+            <div class="mt-8 flex items-center gap-3">
+              @if (promo.status === 'EN_ATTENTE') {
+                <button (click)="updateStatus(promo._id, 'VALIDEE')"
+                  class="flex-1 py-4 bg-teal text-white rounded-xl text-[10px] font-black uppercase tracking-[2px] hover:shadow-xl hover:shadow-teal/20 transition-all active:scale-95">
+                  Valider l'offre
+                </button>
+                <button (click)="updateStatus(promo._id, 'REFUSEE')"
+                  class="flex-1 py-4 border-2 border-red/10 text-red rounded-xl text-[10px] font-black uppercase tracking-[2px] hover:bg-red hover:text-white transition-all">
+                  Refuser
+                </button>
+              } @else {
+                <!-- <div class="w-full flex items-center justify-between p-4 bg-slate-50 rounded-xl">
+                  <div class="flex items-center gap-2">
+                    <i class="fas fa-chart-bar text-slate-300 text-xs"></i>
+                    <span class="text-[10px] font-black text-slate-400 uppercase tracking-widest">{{ promo.vues }} Vues</span>
+                  </div>
+                  <button class="text-[10px] font-black text-dark-blue hover:underline uppercase tracking-widest">Désactiver</button>
+                </div> -->
+              }
+            </div>
+          </div>
+        </div>
+      }
+    </div>
+  </main>
+</div>

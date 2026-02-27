@@ -15,6 +15,8 @@ import { CenterProfilComponent } from './features/admin/components/center-profil
 import { ZonesComponents } from './features/admin/components/zones/zones.components';
 import { CategoriesComponent } from './features/admin/components/categories.component/categories.component';
 import { BoutiquesComponents } from './features/admin/components/boutiques/boutiques.components';
+import { PromotionsComponent } from './features/admin/components/promotions/promotions.component';
+import { AnnoncesComponent } from './features/admin/components/annonces/annonces.component';
 
 export const routes: Routes =  [
   { path: 'home', component: HomeComponent },
@@ -30,7 +32,9 @@ export const routes: Routes =  [
       {path:'dashboard',component:DashboardAdminComponent},
       {path:'zones',component:ZonesComponents},
       {path:'categories',component:CategoriesComponent},
-      {path:'boutiques',component:BoutiquesComponents}
+      {path:'boutiques',component:BoutiquesComponents},
+      {path:'promotions',component:PromotionsComponent},
+      {path:'annonces',component:AnnoncesComponent}
     ]
   },
   //BOUTIQUE

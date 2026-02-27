@@ -21,6 +21,8 @@ export class AdminLayoutComponent {
     { label: 'Zones', class_icon: 'fas fa-box', path: '/admin/zones', active:false},
     { label: 'Catégories', class_icon: 'fas fa-tags', path: '/admin/categories', active:false},
     { label: 'Boutiques', class_icon: 'fas fa-house', path: '/admin/boutiques', active:false},
+    { label: 'Promotions', class_icon: 'fas fa-gift', path: '/admin/promotions', active:false},//fas fa-bullhorn
+    { label: 'Annonces', class_icon: 'fas fa-bullhorn', path: '/admin/annonces', active:false},//fas fa-bullhorn
   ]);//
   constructor(private renderer: Renderer2, @Inject(DOCUMENT) private document: Document,private asideState: AsideState) {
     //surveille le signal : desactive l'overflow de l'arriere plan quand le sidebar est activé
