@@ -16,8 +16,8 @@ export class BoutiqueLayoutComponent {
   isMenuOpen = computed(() => this.asideState.isOpen());
   //menu admin pour sidebar
   menus = signal<NavItem[]> ( [
-    { label: 'Profil Boutique', class_icon: 'fa-solid fa-store', path: '/boutique/home', active:false},
-    { label: 'Consulter', class_icon: 'fa-solid fa-dashboard', path: '/boutique/dashboard', active:false}
+    { label: 'Espace boutique', class_icon: 'fa-solid fa-home', path: '/boutique/home', active:false},
+    { label: 'Profil', class_icon: 'fa-solid fa-store', path: '/boutique/profil', active:false},
   ]);
   constructor(private renderer: Renderer2, @Inject(DOCUMENT) private document: Document,private asideState: AsideState) {
       //surveille le signal : desactive l'overflow de l'arriere plan quand le sidebar est activé

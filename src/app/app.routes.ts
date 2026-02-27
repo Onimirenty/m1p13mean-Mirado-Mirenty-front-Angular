@@ -41,9 +41,10 @@ export const routes: Routes =  [
   //BOUTIQUE
   { path: 'boutique', component: BoutiqueLayoutComponent, canActivate: [AuthGuard], data: { roles: ['BOUTIQUE'] },
     children:[
-      {path:'',component:BoutiqueHomeComponent},
-      {path:'home',component:BoutiqueHomeComponent},
-      {path:'dashboard',component: BoutiqueDashboardComponent}
+      {path:'',component:BoutiqueDashboardComponent},
+      {path:'home',component: BoutiqueDashboardComponent},
+      {path:'profil',component:BoutiqueHomeComponent},
+
     ]
   },
   //CLIENT
