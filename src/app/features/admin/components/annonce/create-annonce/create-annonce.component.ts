@@ -1,5 +1,6 @@
-import { Component, output } from '@angular/core';
+import { Component, computed, output } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AdminStore } from '../../../store/admin.store';
 
 @Component({
   selector: 'app-create-annonce',
@@ -13,7 +14,9 @@ export class CreateAnnonceComponent {
 
   annonceForm: FormGroup;
 
-  constructor(private fb: FormBuilder) {
+  loadingAddAnnonce = computed(()=>this.adminStore.loadingAddAnnonce());
+
+  constructor(private fb: FormBuilder,private adminStore:AdminStore) {
     this.annonceForm = this.fb.group({
       title: ['', [Validators.required, Validators.minLength(5)]],
       content: ['', [Validators.required, Validators.minLength(5)]]

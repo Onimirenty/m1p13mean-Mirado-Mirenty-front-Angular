@@ -215,6 +215,38 @@ export class AdminHttpClient {
     "vues": 120,
     "createdAt": "2026-02-02T16:45:00Z"
   }
+  ];
+  private annonces : any[] =[
+    {
+      "_id": "ann-001",
+      "title": "Nocturne Exceptionnelle : Soldes d'Été",
+      "content": "Ce samedi, profitez de vos boutiques préférées jusqu'à 22h00. Des animations musicales et des distributions de rafraîchissements sont prévues dans la Galerie Centrale.",
+      "createdAt": "2026-02-27T10:00:00Z"
+    },
+    {
+      "_id": "ann-002",
+      "title": "Maintenance Parking Indigo (Niveau -1)",
+      "content": "En raison de travaux de peinture, l'accès au niveau -1 du parking sera fermé du lundi 5 au mercredi 7 février. Merci de privilégier les niveaux supérieurs.",
+      "createdAt": "2026-02-01T09:15:00Z"
+    },
+    {
+      "_id": "ann-003",
+      "title": "Recrutement : Job Dating Akoor",
+      "content": "Plusieurs enseignes du centre (restauration et prêt-à-porter) recrutent pour la saison. Rendez-vous le 15 février à l'Espace Administration avec votre CV.",
+      "createdAt": "2026-01-28T16:30:00Z"
+    },
+    {
+      "_id": "ann-004",
+      "title": "Nouvelle Enseigne : Bienvenue à Starbucks !",
+      "content": "Nous sommes ravis d'accueillir Starbucks dans notre Food Court. Ouverture officielle ce vendredi à 08h00 avec une dégustation gratuite pour les 100 premiers clients.",
+      "createdAt": "2026-01-25T10:00:00Z"
+    },
+    {
+      "_id": "ann-005",
+      "title": "Collecte de Dons : Association 'Handi-Mada'",
+      "content": "Une borne de collecte de vêtements et de fournitures scolaires est disponible à l'accueil du centre tout au long du mois de février. Merci pour votre générosité.",
+      "createdAt": "2026-01-20T11:45:00Z"
+    }
   ]
 
   // ======================================================
@@ -278,7 +310,7 @@ export class AdminHttpClient {
       return of(this.boutiques as unknown as T).pipe(delay(700));
     }
 
-    // 9️⃣Promotions en attente
+    // Promotions en attente
     if (url === `${this.API_URL}/admin/promotions` && param?.get('status') === 'EN_ATTENTE') {
       const result = this.promotions.filter(b => b.status === 'EN_ATTENTE');
       return of(result as unknown as T).pipe(delay(700));
@@ -290,6 +322,10 @@ export class AdminHttpClient {
       return of(result as unknown as T).pipe(delay(700));
     }else if(url === `${this.API_URL}/admin/promotions`){
       return of(this.promotions as unknown as T).pipe(delay(700));
+    }
+    //  Liste des annonces (Public/Admin)
+    if (url === `${this.API_URL}/annonces`) {
+      return of(this.annonces as unknown as T).pipe(delay(600));
     }
 
     return throwError(() => ({
@@ -328,6 +364,19 @@ export class AdminHttpClient {
       this.categories.push(newCategory);
 
       return of(newCategory as unknown as T).pipe(delay(700));
+    }
+    // 10️⃣ Créer une annonce (Admin)
+    if (url === `${this.API_URL}/admin/annonces`) {
+      const newAnnonce = {
+        _id: 'ann-' + Date.now().toString(),
+        title: body.title,
+        content: body.content,
+        createdAt: new Date().toISOString()
+      };
+
+      this.annonces.unshift(newAnnonce); // Ajoute en haut de liste
+
+      return of(newAnnonce as unknown as T).pipe(delay(800));
     }
 
     return throwError(() => ({

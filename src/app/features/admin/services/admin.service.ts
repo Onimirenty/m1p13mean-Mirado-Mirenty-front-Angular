@@ -49,6 +49,10 @@ export interface Boutique {
   status: string;
 }
 
+export interface AnnonceCreate {
+  title: string;
+  content: string;
+}
 @Injectable({
   providedIn: 'root',
 })
@@ -146,6 +150,13 @@ export class AdminService {
   updatePromotionStatus(id: string, status: 'VALIDEE' | 'REFUSEE'): Observable<any> {
     const body = { status };
     return this.http.patch<any>(`${this.API_URL}/admin/promotions/${id}`, body);
+  }
+
+  // ======================================================
+  // ANNONCES
+  // ======================================================
+    createAnnonce(payload: AnnonceCreate ): Observable<any> {
+    return this.http.post(`${this.API_URL}/annonces`, payload);
   }
 
 }

@@ -6,6 +6,8 @@ import { AdminService, Boutique, CategorieCreate, centerUpdate, Zone, ZoneCreate
 import { CenterProfile } from '../components/profil-center/center-profil/center-profil.component';
 import { Categorie } from '../../../core/store/categorie.state';
 import { Promotion } from '../components/promotions/promotions.component';
+import { Annonce } from '../components/annonce/annonces/annonces.component';
+import { AnnoncePublicService } from '../../../core/services/annonce-public.service';
 
 export interface UserRegister{
   nom:string,
@@ -24,7 +26,7 @@ export class AdminStore {
   dashboard = this._dashboard.asReadonly()
   readonly errorStat = computed(() => this._errorStat());
 
-  constructor(private statisticsAdminService:StatisticsAdminService, private adminService:AdminService){}
+  constructor(private statisticsAdminService:StatisticsAdminService, private adminService:AdminService, private annoncePublicService:AnnoncePublicService){}
 
   statistics(day:number){
 
@@ -391,6 +393,73 @@ export class AdminStore {
     this._successActionPromo.update(ids => ids.filter(i => i !== id));
   }
 
+  // --- ÉTATS DES ANNONCES (LECTURE) ---
+  private _annonces = signal<Annonce[] | null>(null);
+  private _loadingAnnonces = signal<boolean>(false);
+
+  readonly annonces = this._annonces.asReadonly();
+  readonly loadingAnnonces = computed(() => this._loadingAnnonces());
+
+  annoncesCenter() {
+    this._loadingAnnonces.set(true);
+    // Utilise AnnoncePublicService pour la récupération (findAll)
+    this.annoncePublicService.findAll().subscribe({
+      next: (res) => {
+        this._loadingAnnonces.set(false);
+        this._annonces.set(res);
+      },
+      error: (error) => {
+        this._loadingAnnonces.set(false);
+        console.error('Erreur lors du chargement des annonces:', error);
+      }
+    });
+  }
+
+  // --- ÉTATS D'AJOUT D'UNE ANNONCE (ADMIN) ---
+  private _loadingAddAnnonce = signal<boolean>(false);
+  private _errorAddAnnonce = signal<string | null>(null);
+  private _successAddAnnonce = signal<boolean>(false);
+
+  readonly loadingAddAnnonce = computed(() => this._loadingAddAnnonce());
+  readonly errorAddAnnonce = computed(() => this._errorAddAnnonce());
+  readonly successAddAnnonce = computed(() => this._successAddAnnonce());
+
+  addAnnonce(annonceCreate: { title: string, content: string }) {
+    if (this.loadingAddAnnonce()) {
+      return;
+    }
+
+    this._loadingAddAnnonce.set(true);
+    this._errorAddAnnonce.set(null);
+    this._successAddAnnonce.set(false);
+
+    this.adminService.createAnnonce(annonceCreate).subscribe({
+      next: (newAnnonce) => {
+        this._loadingAddAnnonce.set(false);
+        this._successAddAnnonce.set(true);
+
+        // Mise à jour optimiste du signal local
+        const current = this._annonces();
+        if (current) {
+          this._annonces.set([newAnnonce, ...current]);
+        }
+      },
+      error: (error) => {
+        this._loadingAddAnnonce.set(false);
+        if ([400, 404, 409].includes(error?.status)) {
+          this._errorAddAnnonce.set(error?.error?.message || error?.message);
+        }
+        else if (![401, 403].includes(error?.status)) {
+          this._errorAddAnnonce.set("Erreur inattendue lors de la création. Veuillez réessayer.");
+        }
+      }
+    });
+  }
+
+  resetStatusAddAnnonce() {
+    this._successAddAnnonce.set(false);
+    this._errorAddAnnonce.set(null);
+  }
 
 
 

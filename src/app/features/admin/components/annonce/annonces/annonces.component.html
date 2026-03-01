@@ -21,7 +21,40 @@
   <!-- LISTE DES ANNONCES (SCROLLABLE) -->
   <main class="flex-1 overflow-y-auto p-6 md:p-10">
     <div class="max-w-4xl mx-auto space-y-6 pb-20">
+    <!-- SKELETON LOADING ANIMATION -->
+      @if (loadingAnnonces()) {
+        @for (i of [1,2,3,4]; track $index) {
+          <div class="relative bg-white border border-slate-50 p-8 rounded-[2.5rem] shadow-sm overflow-hidden animate-pulse">
 
+            <!-- Date de publication Fantôme -->
+            <div class="flex items-center gap-3 mb-6">
+              <span class="w-2 h-2 rounded-full bg-slate-100"></span>
+              <div class="h-3 bg-slate-100 rounded-full w-32"></div>
+            </div>
+
+            <!-- Contenu Fantôme -->
+            <div class="space-y-4">
+              <!-- Titre Fantôme -->
+              <div class="h-8 bg-slate-200 rounded-xl w-3/4"></div>
+
+              <!-- Description Fantôme (Multi-lignes) -->
+              <div class="space-y-2">
+                <div class="h-4 bg-slate-100 rounded-lg w-full"></div>
+                <div class="h-4 bg-slate-100 rounded-lg w-5/6"></div>
+                <div class="h-4 bg-slate-50 rounded-lg w-2/3"></div>
+              </div>
+            </div>
+
+            <!-- Décoration de coin Fantôme -->
+            <div class="absolute top-0 right-0 p-6 opacity-5">
+              <div class="w-12 h-12 bg-slate-200 rounded-full"></div>
+            </div>
+
+            <!-- Effet Shimmer (Balayage) -->
+            <div class="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/40 to-transparent animate-[shimmer_2s_infinite]"></div>
+          </div>
+        }
+      }
       @for (annonce of annonces(); track annonce._id) {
         <div class="group relative bg-white border border-slate-100 p-8 rounded-[2.5rem] shadow-sm hover:shadow-2xl hover:border-teal/20 transition-all duration-500">
 

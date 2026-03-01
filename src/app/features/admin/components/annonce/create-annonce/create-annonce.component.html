@@ -40,14 +40,28 @@
         }
       </div>
 
-      <!-- Boutons d'Action (Identique à ton UI) -->
+      <!-- Boutons d'Action avec Loading -->
       <div class="flex flex-col gap-3 pt-2">
-        <button type="submit" [disabled]="annonceForm.invalid"
-          class="w-full py-4 bg-dark-blue text-white font-black text-xs uppercase tracking-[2px] rounded-xl shadow-xl hover:bg-teal disabled:bg-slate-200 transition-all active:scale-95">
-          PUBLIER MAINTENANT
+        <button type="submit" [disabled]="annonceForm.invalid || loadingAddAnnonce()"
+          class="relative w-full py-4 bg-dark-blue text-white font-black text-xs uppercase tracking-[2px] rounded-xl shadow-xl hover:bg-teal disabled:bg-slate-200 transition-all active:scale-95 shadow-dark-blue/10 overflow-hidden">
+
+          @if(loadingAddAnnonce()) {
+            <div class="absolute inset-0 flex items-center justify-center bg-dark-blue/10 backdrop-blur-[1px]">
+              <div class="flex items-center gap-2">
+                <div class="w-2 h-2 bg-white rounded-full animate-bounce [animation-delay:-0.3s]"></div>
+                <div class="w-2 h-2 bg-white rounded-full animate-bounce [animation-delay:-0.15s]"></div>
+                <div class="w-2 h-2 bg-white rounded-full animate-bounce"></div>
+              </div>
+            </div>
+            <span class="opacity-0">PUBLIER L'ANNONCE</span>
+          } @else {
+            <span>PUBLIER L'ANNONCE</span>
+          }
         </button>
-        <button type="button" (click)="close.emit()" class="text-xs text-slate-400 font-bold hover:text-red transition-colors">
-          ANNULER ET FERMER
+
+        <button type="button" (click)="close.emit()" [disabled]="loadingAddAnnonce()"
+          class="text-xs text-slate-400 font-bold hover:text-red transition-colors py-2 disabled:opacity-50">
+          Annuler l'opération
         </button>
       </div>
     </form>
