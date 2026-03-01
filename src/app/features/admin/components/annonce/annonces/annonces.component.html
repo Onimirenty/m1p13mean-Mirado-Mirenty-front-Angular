@@ -1,0 +1,125 @@
+<div class="h-screen flex flex-col bg-[#FDFDFD]">
+  <!-- HEADER -->
+  <header class="flex-shrink-0 z-20 bg-white/80 backdrop-blur-xl border-b border-slate-100 px-6 py-8">
+    <div class="max-w-4xl mx-auto flex justify-between items-center">
+      <div class="flex items-center gap-5">
+        <div class="w-12 h-12 bg-dark-blue rounded-2xl flex items-center justify-center text-yellow shadow-xl shadow-dark-blue/20">
+          <i class="fas fa-bullhorn text-xl"></i>
+        </div>
+        <div>
+          <h1 class="text-3xl font-black text-dark-blue tracking-tighter italic">Annonces Centre</h1>
+          <p class="text-[9px] font-black text-slate-400 uppercase tracking-[4px] mt-1">Diffusion d'informations</p>
+        </div>
+      </div>
+
+      <button type="button" (click)="isPublishModalOpen.set(true)" class="bg-dark-blue text-white px-6 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-teal transition-all shadow-lg shadow-dark-blue/10 active:scale-95">
+        <i class="fas fa-plus mr-2"></i> Publier
+      </button>
+    </div>
+  </header>
+
+  <!-- LISTE DES ANNONCES (SCROLLABLE) -->
+  <main class="flex-1 overflow-y-auto p-6 md:p-10">
+    <div class="max-w-4xl mx-auto space-y-6 pb-20">
+    <!-- SKELETON LOADING ANIMATION -->
+      @if (loadingAnnonces()) {
+        @for (i of [1,2,3,4]; track $index) {
+          <div class="relative bg-white border border-slate-50 p-8 rounded-[2.5rem] shadow-sm overflow-hidden animate-pulse">
+
+            <!-- Date de publication Fantôme -->
+            <div class="flex items-center gap-3 mb-6">
+              <span class="w-2 h-2 rounded-full bg-slate-100"></span>
+              <div class="h-3 bg-slate-100 rounded-full w-32"></div>
+            </div>
+
+            <!-- Contenu Fantôme -->
+            <div class="space-y-4">
+              <!-- Titre Fantôme -->
+              <div class="h-8 bg-slate-200 rounded-xl w-3/4"></div>
+
+              <!-- Description Fantôme (Multi-lignes) -->
+              <div class="space-y-2">
+                <div class="h-4 bg-slate-100 rounded-lg w-full"></div>
+                <div class="h-4 bg-slate-100 rounded-lg w-5/6"></div>
+                <div class="h-4 bg-slate-50 rounded-lg w-2/3"></div>
+              </div>
+            </div>
+
+            <!-- Décoration de coin Fantôme -->
+            <div class="absolute top-0 right-0 p-6 opacity-5">
+              <div class="w-12 h-12 bg-slate-200 rounded-full"></div>
+            </div>
+
+            <!-- Effet Shimmer (Balayage) -->
+            <div class="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/40 to-transparent animate-[shimmer_2s_infinite]"></div>
+          </div>
+        }
+      }
+      @for (annonce of annonces(); track annonce._id) {
+        <div class="group relative bg-white border border-slate-100 p-8 rounded-[2.5rem] shadow-sm hover:shadow-2xl hover:border-teal/20 transition-all duration-500">
+
+          <!-- Date de publication -->
+          <div class="flex items-center gap-3 mb-6">
+            <!-- Point dynamique : Jaune si récent, Slate si ancien -->
+            <span [class]="isRecent(annonce.createdAt) ? 'bg-yellow shadow-[0_0_10px_#e9c46a]' : 'bg-slate-300'"
+                  class="w-2 h-2 rounded-full transition-all"></span>
+
+            <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest italic">
+              Publié le {{ annonce.createdAt }}
+            </p>
+
+            @if (isRecent(annonce.createdAt)) {
+              <span class="bg-teal text-white text-[8px] font-black px-2 py-0.5 rounded uppercase tracking-tighter animate-bounce">Nouveau</span>
+            }
+          </div>
+
+          <!-- Contenu -->
+          <div class="space-y-3">
+            <h3 class="text-2xl font-black text-dark-blue tracking-tight group-hover:text-teal transition-colors">
+              {{ annonce.title }}
+            </h3>
+            <p class="text-slate-500 font-medium leading-relaxed italic opacity-80">
+              "{{ annonce.content }}"
+            </p>
+          </div>
+
+          <!-- Actions discrètes -->
+          <!-- <div class="mt-8 pt-6 border-t border-slate-50 flex justify-between items-center">
+            <div class="flex items-center gap-4">
+               <button class="text-[10px] font-black text-dark-blue hover:text-teal uppercase tracking-widest transition-colors flex items-center gap-2">
+                 <i class="far fa-edit"></i> Modifier
+               </button>
+               <button class="text-[10px] font-black text-red/60 hover:text-red uppercase tracking-widest transition-colors flex items-center gap-2">
+                 <i class="far fa-trash-alt"></i> Supprimer
+               </button>
+            </div>
+
+            <div class="flex items-center gap-2">
+               <span class="w-8 h-8 rounded-full bg-slate-50 flex items-center justify-center text-slate-300 text-xs">
+                 <i class="fas fa-eye"></i>
+               </span>
+               <span class="text-[10px] font-bold text-slate-300 italic">Visible par tous</span>
+            </div>
+          </div> -->
+
+          <!-- Décoration de coin -->
+          <div class="absolute top-0 right-0 p-6 opacity-5 group-hover:opacity-10 transition-opacity">
+            <i class="fas fa-quote-right text-5xl text-dark-blue"></i>
+          </div>
+        </div>
+      } @empty {
+        <div class="py-20 text-center border-4 border-dashed border-slate-100 rounded-[3rem]">
+           <i class="fas fa-paper-plane text-4xl text-slate-200 mb-4"></i>
+           <p class="text-slate-400 font-bold italic tracking-tight">Aucune annonce publiée pour le moment.</p>
+        </div>
+      }
+
+    </div>
+  </main>
+</div>
+@if(isPublishModalOpen()) {
+  <app-create-annonce
+    (close)="isPublishModalOpen.set(false)"
+    (submitAnnonce)="handlePublish($event)">
+  </app-create-annonce>
+}

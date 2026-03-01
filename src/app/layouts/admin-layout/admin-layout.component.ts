@@ -15,24 +15,36 @@ export class AdminLayoutComponent {
   //signal pour ouverture et fermeture du sidebar
   isMenuOpen = computed(() => this.asideState.isOpen());
   //menu admin pour sidebar
-  adminMenu: NavItem[] = [
-    { label: 'Home', class_icon: 'fas fa-chart-line', path: '/admin/home', active:false},
-    { label: 'Utilisateurs', class_icon: 'fas fa-users', path: '/admin/users', active:false},
-    { label: 'Infrastructure', class_icon: 'fas fa-server', path: '/admin/infra', active:true},
-    { label: 'Paramètres', class_icon: 'fas fa-cog', path: '/admin/settings', active:false }
-  ];
+  menus = signal<NavItem[]> ([
+    { label: 'Profil Centre', class_icon: 'fas fa-store', path: '/admin/center', active: false },
+    { label: 'Tableau de bord', class_icon: 'fas fa-chart-line', path: '/admin/dashboard', active:false},
+    { label: 'Zones', class_icon: 'fas fa-box', path: '/admin/zones', active:false},
+    { label: 'Catégories', class_icon: 'fas fa-tags', path: '/admin/categories', active:false},
+    { label: 'Boutiques', class_icon: 'fas fa-house', path: '/admin/boutiques', active:false},
+    { label: 'Promotions', class_icon: 'fas fa-gift', path: '/admin/promotions', active:false},//fas fa-bullhorn
+    { label: 'Annonces', class_icon: 'fas fa-bullhorn', path: '/admin/annonces', active:false},//fas fa-bullhorn
+  ]);//
   constructor(private renderer: Renderer2, @Inject(DOCUMENT) private document: Document,private asideState: AsideState) {
-      //surveille le signal : desactive l'overflow de l'arriere plan quand le sidebar est activé
-      effect(() => {
-        const open = this.isMenuOpen();
-        if (open) {
-          this.renderer.addClass(this.document.body, 'overflow-hidden');
-        } else {
-          this.renderer.removeClass(this.document.body, 'overflow-hidden');
-        }
-      });
-    }
+    //surveille le signal : desactive l'overflow de l'arriere plan quand le sidebar est activé
+    effect(() => {
+      const open = this.isMenuOpen();
+      if (open) {
+        this.renderer.addClass(this.document.body, 'overflow-hidden');
+      } else {
+        this.renderer.removeClass(this.document.body, 'overflow-hidden');
+      }
+    });
+  }
   toggleMenu() {
     this.asideState.toggleMenu();
   }
+  activateIndex(path:string) {
+    this.menus.update(items =>
+      items.map((item, i) => ({
+        ...item,
+        active: item.path === path
+      }))
+  );
 }
+}
+//menuItems = signal<NavItem[]>([]);

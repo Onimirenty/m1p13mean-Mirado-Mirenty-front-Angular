@@ -1,0 +1,72 @@
+<div class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-dark-blue/40 backdrop-blur-sm animate-in fade-in duration-200">
+
+  <div class="relative w-full max-w-md bg-white p-6 md:p-10 rounded-2xl shadow-2xl overflow-hidden animate-in slide-in-from-bottom-4">
+    <!-- Header (Identique à ton Register) -->
+    <div class="p-4 md:p-4 flex items-center gap-2 border-b border-slate-100 bg-white sticky top-0 z-20">
+      <div class="flex-shrink-0 w-12 h-12 bg-dark-blue rounded-xl flex items-center justify-center shadow-lg">
+        <i class="fas fa-bullhorn text-white text-xl"></i>
+      </div>
+      <div class="text-left flex-1">
+        <h2 class="text-xl font-extrabold text-dark-blue leading-tight">Nouvelle <span class="text-yellow">Annonce</span></h2>
+        <p class="text-[10px] font-black text-yellow uppercase tracking-[2px] mt-0.5">
+          Diffusion au centre
+        </p>
+      </div>
+      <button (click)="close.emit()" class="text-slate-300 hover:text-red transition-colors p-2">
+        <i class="fas fa-times text-xl"></i>
+      </button>
+    </div>
+
+    <!-- Formulaire -->
+    <form [formGroup]="annonceForm" (ngSubmit)="save()" class="space-y-6 mt-4">
+
+      <!-- Titre de l'annonce -->
+      <div class="space-y-2">
+        <label class="block text-sm font-bold text-slate-700 ml-1">Titre de l'annonce</label>
+        <input formControlName="title" type="text" placeholder="ex: Ouverture exceptionnelle"
+          class="w-full px-5 py-4 border border-dark-blue rounded-xl focus:ring-4 focus:ring-dark-blue/5 outline-none transition font-bold text-sm bg-slate-50/50">
+        @if(annonceForm.get('title')?.invalid && annonceForm.get('title')?.dirty) {
+          <p class="text-red text-[10px] font-bold ml-2 italic">Le titre est trop court (min. 5 caractéristiques)</p>
+        }
+      </div>
+
+      <!-- Contenu du message -->
+      <div class="space-y-2">
+        <label class="block text-sm font-bold text-slate-700 ml-1">Contenu du message</label>
+        <textarea formControlName="content" rows="5" placeholder="Décrivez les détails de l'annonce..."
+          class="w-full px-5 py-4 border border-dark-blue rounded-xl focus:ring-4 focus:ring-dark-blue/5 outline-none transition font-bold text-sm bg-slate-50/50 resize-none leading-relaxed"></textarea>
+        @if(annonceForm.get('content')?.invalid && annonceForm.get('content')?.dirty) {
+          <p class="text-red text-[10px] font-bold ml-2 italic">Le contenu est requis (min. 5 caractéristiques)</p>
+        }
+      </div>
+
+      <!-- Boutons d'Action avec Loading -->
+      <div class="flex flex-col gap-3 pt-2">
+        <button type="submit" [disabled]="annonceForm.invalid || loadingAddAnnonce()"
+          class="relative w-full py-4 bg-dark-blue text-white font-black text-xs uppercase tracking-[2px] rounded-xl shadow-xl hover:bg-teal disabled:bg-slate-200 transition-all active:scale-95 shadow-dark-blue/10 overflow-hidden">
+
+          @if(loadingAddAnnonce()) {
+            <div class="absolute inset-0 flex items-center justify-center bg-dark-blue/10 backdrop-blur-[1px]">
+              <div class="flex items-center gap-2">
+                <div class="w-2 h-2 bg-white rounded-full animate-bounce [animation-delay:-0.3s]"></div>
+                <div class="w-2 h-2 bg-white rounded-full animate-bounce [animation-delay:-0.15s]"></div>
+                <div class="w-2 h-2 bg-white rounded-full animate-bounce"></div>
+              </div>
+            </div>
+            <span class="opacity-0">PUBLIER L'ANNONCE</span>
+          } @else {
+            <span>PUBLIER L'ANNONCE</span>
+          }
+        </button>
+
+        <button type="button" (click)="close.emit()" [disabled]="loadingAddAnnonce()"
+          class="text-xs text-slate-400 font-bold hover:text-red transition-colors py-2 disabled:opacity-50">
+          Annuler l'opération
+        </button>
+      </div>
+    </form>
+
+    <!-- Décoration discrète -->
+    <div class="absolute -bottom-10 -right-10 w-32 h-32 bg-yellow/5 rounded-full blur-3xl"></div>
+  </div>
+</div>
