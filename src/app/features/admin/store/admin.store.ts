@@ -5,6 +5,7 @@ import { StatisticsAdminService } from '../services/statistics-admin.service';
 import { AdminService, Boutique, CategorieCreate, centerUpdate, Zone, ZoneCreate } from '../services/admin.service';
 import { CenterProfile } from '../components/profil-center/center-profil/center-profil.component';
 import { Categorie } from '../../../core/store/categorie.state';
+import { Promotion } from '../components/promotions/promotions.component';
 
 export interface UserRegister{
   nom:string,
@@ -295,6 +296,9 @@ export class AdminStore {
   }
 
   resetStatusActionBoutique(id:string) {
+    this._successActionBoutique.update(items =>
+      items.filter(item => item !== id)
+    );
     this._errorActionBoutique.update(objErrors =>
       objErrors.filter(objErr => objErr.id !== id)
     );
@@ -302,6 +306,93 @@ export class AdminStore {
       items.filter(item => item !== id)
     );
   }
+
+  // --- ÉTATS DES PROMOTIONS (LECTURE) ---
+  private _promotions = signal<Promotion[] | null>(null);
+  private _loadingPromotions = signal<boolean>(false);
+
+  readonly promotions = this._promotions.asReadonly();
+  readonly loadingPromotions = computed(() => this._loadingPromotions());
+
+  promotionsCenter(status: string | null) {
+    this._loadingPromotions.set(true);
+    this.adminService.getPromotions(status).subscribe({
+      next: (res) => {
+        this._loadingPromotions.set(false);
+        this._promotions.set(res);
+      },
+      error: (error) => {
+        this._loadingPromotions.set(false);
+        console.error('Erreur chargement promotions:', error);
+      }
+    });
+  }
+
+  // --- ÉTATS DES ACTIONS SUR PROMOTION (VALIDER / REFUSER) ---
+  private _loadingActionPromo = signal<string[]>([]);
+  private _successActionPromo = signal<string[]>([]);
+  private _errorActionPromo = signal<{id:string, error:string}[]>([]);
+
+  readonly successActionPromo = computed(() => this._successActionPromo());
+  readonly errorActionPromo = computed(() => this._errorActionPromo());
+
+  // Sélecteurs réactifs par ID
+  loadingActionPromoById(id: string) {
+    return computed(() => this._loadingActionPromo().includes(id));
+  }
+
+  errorActionPromoById(id: string) {
+    return computed(() =>
+      this._errorActionPromo().find(e => e.id === id)?.error || "Erreur d'opération"
+    );
+  }
+  lastIdInSuccessActionPromoById() {
+    return computed(() => this.successActionPromo()[this.successActionPromo().length-1]);
+  }
+  lastIdInErrorActionPromo() {
+    return computed(() => this.errorActionPromo()[this.errorActionPromo().length-1]);
+  }
+
+  /**
+   * Action de validation ou refus
+   */
+  updatePromotionStatus(id: string, status: 'VALIDEE' | 'REFUSEE') {
+    this._startPromoAction(id);
+    this.adminService.updatePromotionStatus(id, status).subscribe({
+      next: (updatedPromo) => {
+        this._handlePromoSuccess(id);
+      },
+      error: (err) => this._handlePromoError(id, err)
+    });
+  }
+
+  // --- MÉTHODES PRIVÉES ---
+
+  private _startPromoAction(id: string) {
+    this._loadingActionPromo.update(ids => [...ids, id]);
+    this._errorActionPromo.update(errors => errors.filter(e => e.id !== id));
+  }
+
+  private _handlePromoError(id: string, error: any) {
+    this._loadingActionPromo.update(ids => ids.filter(i => i !== id));
+    const message = error?.error?.message || "L'opération a échoué.";
+    this._errorActionPromo.update(errors => [...errors, { id, error: message }]);
+  }
+
+  private _handlePromoSuccess(id: string) {
+    this._loadingActionPromo.update(ids => ids.filter(i => i !== id));
+    this._successActionPromo.update(ids => [...ids, id]);
+  }
+
+
+  resetStatusActionPromo(id: string) {
+    this._errorActionPromo.update(errors => errors.filter(e => e.id !== id));
+    this._loadingActionPromo.update(ids => ids.filter(i => i !== id));
+    this._successActionPromo.update(ids => ids.filter(i => i !== id));
+  }
+
+
+
 
 
   // register(boutiqueRegister:BoutiqueRegister,file:File|null){

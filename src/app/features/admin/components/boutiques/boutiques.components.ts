@@ -75,13 +75,13 @@ export class BoutiquesComponents implements OnInit {
         const lastId=this.adminStore?.lastIdInErrorActionBoutique()()?.id;
         if(lastId){
           this.notificationService.showError(this.adminStore.errorActionBoutiqueById(lastId)()!);
-          this.adminStore.resetStatusAddZone();
+          this.adminStore.resetStatusActionBoutique(lastId);
         }
       }
     });
   }
   ngOnInit(): void {
-    this.adminStore.boutiquesCenter();
+    this.adminStore.boutiquesCenter(null);
   }
   validateBoutique(id: string) {
     // this.boutiques()?.update(list =>

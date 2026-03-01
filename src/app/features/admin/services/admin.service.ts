@@ -4,6 +4,7 @@ import { Observable } from "rxjs";
 import { HttpParams } from "@angular/common/http";
 import { AdminHttpClient } from "../../../a-httpclient-simulation/admin-http-client";
 import { Categorie } from "../../../core/store/categorie.state";
+import { Promotion } from "../components/promotions/promotions.component";
 
 // store.model.ts
 export interface centerUpdate {
@@ -101,7 +102,7 @@ export class AdminService {
   }
 
   // ======================================================
-  // BOUTIQUES EN ATTENTE
+  // BOUTIQUES
   // ======================================================
 
   getBoutiques(status:string|null): Observable<Boutique[]> {
@@ -127,6 +128,24 @@ export class AdminService {
 
   disableBoutique(id: string): Observable<any> {
     return this.http.patch(`${this.API_URL}/boutiques/${id}/disable`);
+  }
+
+  // ======================================================
+  // PROMOTIONS
+  // ======================================================
+
+  getPromotions(status:string|null): Observable<Promotion[]> {
+    if(status!=null){
+      const params = new HttpParams().set('status', status);
+      return this.http.get(`${this.API_URL}/promotions`, params);
+    }else{
+      return this.http.get(`${this.API_URL}/promotions`);
+    }
+  }
+
+  updatePromotionStatus(id: string, status: 'VALIDEE' | 'REFUSEE'): Observable<any> {
+    const body = { status };
+    return this.http.patch<any>(`${this.API_URL}/admin/promotions/${id}`, body);
   }
 
 }
